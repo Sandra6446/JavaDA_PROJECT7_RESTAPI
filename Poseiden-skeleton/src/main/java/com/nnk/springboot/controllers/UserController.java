@@ -20,8 +20,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @RequestMapping("/user/list")
-    public String home(Model model)
-    {
+    public String home(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
@@ -57,7 +56,6 @@ public class UserController {
         if (result.hasErrors()) {
             return "user/update";
         }
-
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
         user.setId(id);
