@@ -31,5 +31,4 @@ public class CurvePointDto {
         this.term = curvePoint.getTerm();
         this.value = curvePoint.getValue();
     }
-
 }

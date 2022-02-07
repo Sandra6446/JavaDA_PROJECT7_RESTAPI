@@ -1,8 +1,6 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.dto.CurvePointDto;
-import com.nnk.springboot.domain.entity.CurvePoint;
-import com.nnk.springboot.service.BidListService;
 import com.nnk.springboot.service.CurvePointService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +18,7 @@ import javax.validation.Valid;
 @Controller
 public class CurveController {
 
-    private static final Logger logger = LogManager.getLogger(BidListService.class);
+    private static final Logger logger = LogManager.getLogger(CurveController.class);
 
     @Autowired
     CurvePointService curvePointService;
@@ -58,7 +56,7 @@ public class CurveController {
     @PostMapping("/curvePoint/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid CurvePointDto curvePointDto,
                              BindingResult result, Model model) {
-        curvePointDto.setCurveId(id);
+        curvePointDto.setId(id);
         if (result.hasErrors()) {
             logger.error(result.getAllErrors());
             return "curvePoint/update";
