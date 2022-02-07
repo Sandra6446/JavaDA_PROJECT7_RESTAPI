@@ -20,7 +20,7 @@ public class RatingTest {
         rating.updateFromDto(ratingDto);
         Assert.assertEquals(updatedRating,rating);
 
-        // CurvePointDto with bad id
+        // RatingDto with bad id
         ratingDto.setId(2);
         ratingDto.setOrderNumber(6);
         rating.updateFromDto(ratingDto);
