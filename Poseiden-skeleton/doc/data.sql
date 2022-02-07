@@ -1,4 +1,3 @@
-
 CREATE TABLE BidList (
   BidListId tinyint(4) NOT NULL AUTO_INCREMENT,
   account VARCHAR(30) NOT NULL,
@@ -24,8 +23,7 @@ CREATE TABLE BidList (
   side VARCHAR(125),
 
   PRIMARY KEY (BidListId)
-)
-ENGINE = InnoDB;
+);
 
 CREATE TABLE Trade (
   TradeId tinyint(4) NOT NULL AUTO_INCREMENT,
@@ -51,8 +49,7 @@ CREATE TABLE Trade (
   side VARCHAR(125),
 
   PRIMARY KEY (TradeId)
-)
-ENGINE = InnoDB;
+);
 
 CREATE TABLE CurvePoint (
   Id tinyint(4) NOT NULL AUTO_INCREMENT,
@@ -63,8 +60,7 @@ CREATE TABLE CurvePoint (
   creationDate TIMESTAMP ,
 
   PRIMARY KEY (Id)
-)
-ENGINE = InnoDB;
+);
 
 CREATE TABLE Rating (
   Id tinyint(4) NOT NULL AUTO_INCREMENT,
@@ -74,8 +70,7 @@ CREATE TABLE Rating (
   orderNumber tinyint,
 
   PRIMARY KEY (Id)
-)
-ENGINE = InnoDB;
+);
 
 CREATE TABLE RuleName (
   Id tinyint(4) NOT NULL AUTO_INCREMENT,
@@ -87,8 +82,7 @@ CREATE TABLE RuleName (
   sqlPart VARCHAR(125),
 
   PRIMARY KEY (Id)
-)
-ENGINE = InnoDB;
+);
 
 CREATE TABLE Users (
   Id tinyint(4) NOT NULL AUTO_INCREMENT,
@@ -98,8 +92,7 @@ CREATE TABLE Users (
   role VARCHAR(125),
 
   PRIMARY KEY (Id)
-)
-ENGINE = InnoDB;
+);
 
 insert into Users(fullname, username, password, role) values("Administrator", "admin", "$2a$10$pBV8ILO/s/nao4wVnGLrh.sa/rnr5pDpbeC4E.KNzQWoy8obFZdaa", "ADMIN");
 insert into Users(fullname, username, password, role) values("User", "user", "$2a$10$pBV8ILO/s/nao4wVnGLrh.sa/rnr5pDpbeC4E.KNzQWoy8obFZdaa", "USER");
