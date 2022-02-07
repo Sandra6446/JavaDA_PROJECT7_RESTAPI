@@ -1,8 +1,7 @@
 package com.nnk.springboot.service;
 
-import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.domain.entity.BidList;
 import com.nnk.springboot.domain.dto.BidListDto;
-import com.nnk.springboot.domain.mapper.BidListMapper;
 import com.nnk.springboot.repositories.BidListRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -29,9 +28,6 @@ public class BidListServiceTest {
 
     @MockBean
     private BidListRepository bidListRepository;
-
-    @MockBean
-    private BidListMapper bidListMapper;
 
     private List<BidList> bidLists;
     private List<BidListDto> bidListDtos;
@@ -66,7 +62,6 @@ public class BidListServiceTest {
     public void getById() {
         BidListDto bidListDto = new BidListDto(1, "First bidList", "Type 1", 20.0);
         Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidLists.get(0)));
-        Mockito.when(bidListMapper.toBidListDto(bidLists.get(0))).thenReturn(bidListDto);
         Assert.assertEquals(bidListDto, bidListService.getById(1));
     }
 
@@ -80,7 +75,6 @@ public class BidListServiceTest {
     public void save() {
         BidListDto bidListDto = bidListDtos.get(0);
         BidList bidList = bidLists.get(0);
-        Mockito.when(bidListMapper.toBidList(bidListDto)).thenReturn(bidList);
         bidListService.save(bidListDto);
         verify(bidListRepository,times(1)).saveAndFlush(bidList);
     }
@@ -89,7 +83,6 @@ public class BidListServiceTest {
     public void update() {
         BidListDto bidListDto = bidListDtos.get(0);
         BidList bidList = bidLists.get(0);
-        Mockito.when(bidListMapper.toBidList(bidListDto)).thenReturn(bidList);
         Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidList));
         bidListService.update(bidListDto);
         verify(bidListRepository,times(1)).saveAndFlush(bidList);

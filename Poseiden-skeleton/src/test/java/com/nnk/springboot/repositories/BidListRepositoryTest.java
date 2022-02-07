@@ -1,7 +1,7 @@
 
 package com.nnk.springboot.repositories;
 
-import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.domain.entity.BidList;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

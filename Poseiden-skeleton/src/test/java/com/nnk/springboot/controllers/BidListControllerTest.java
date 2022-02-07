@@ -38,7 +38,7 @@ public class BidListControllerTest {
     @Before
     public void setUp() {
 
-        bidListDto = new BidListDto(1, "Account name", "type", 5);
+        bidListDto = new BidListDto(1, "Account name", "type", 5d);
 
         BidListDto bidListDto1 = new BidListDto(1, "First bidList", "Type 1", 20.0);
         BidListDto bidListDto2 = new BidListDto(2, "Second bidList", "Type 2", 10.0);

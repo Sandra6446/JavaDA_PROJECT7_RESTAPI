@@ -1,8 +1,7 @@
 package com.nnk.springboot.service;
 
-import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.domain.entity.BidList;
 import com.nnk.springboot.domain.dto.BidListDto;
-import com.nnk.springboot.domain.mapper.BidListMapper;
 import com.nnk.springboot.repositories.BidListRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class BidListService implements CrudService <BidListDto> {
         List<BidList> bidLists = bidListRepository.findAll();
         List<BidListDto> bidListDtos = new ArrayList<>();
         for (BidList bidList : bidLists) {
-            bidListDtos.add(BidListMapper.INSTANCE.toBidListDto(bidList));
+            bidListDtos.add(new BidListDto(bidList));
         }
         return bidListDtos;
     }
@@ -33,18 +32,19 @@ public class BidListService implements CrudService <BidListDto> {
     @Override
     public BidListDto getById(Integer id) {
         BidList bidList = bidListRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid bid Id:" + id));
-        return BidListMapper.INSTANCE.toBidListDto(bidList);
+        return new BidListDto(bidList);
     }
 
     @Override
     public void save(BidListDto bidListDto) {
-        bidListRepository.saveAndFlush(BidListMapper.INSTANCE.toBidList(bidListDto));
+        bidListRepository.saveAndFlush(new BidList(bidListDto));
     }
 
     @Override
     public void update(BidListDto bidListDto) {
-        BidList bidListEntity = bidListRepository.findById(bidListDto.getBidListId()).orElseThrow(() -> new IllegalArgumentException("Invalid bid with id :" + bidListDto.getBidListId()));
-        bidListRepository.saveAndFlush(BidListMapper.INSTANCE.toBidList(bidListDto, bidListEntity));
+        BidList bidList = bidListRepository.findById(bidListDto.getBidListId()).orElseThrow(() -> new IllegalArgumentException("Invalid bid with id :" + bidListDto.getBidListId()));
+        bidList.updateFromDto(bidListDto);
+        bidListRepository.saveAndFlush(bidList);
     }
 
     @Override

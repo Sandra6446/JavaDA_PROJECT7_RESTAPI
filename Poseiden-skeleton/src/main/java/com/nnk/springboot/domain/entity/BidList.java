@@ -1,12 +1,10 @@
-package com.nnk.springboot.domain;
+package com.nnk.springboot.domain.entity;
 
 import com.nnk.springboot.domain.dto.BidListDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 
 @Data
@@ -15,14 +13,13 @@ import java.sql.Timestamp;
 @Table(name = "bidlist")
 public class BidList {
 
+    // TODO : Controler creationName et revisionName cf securite
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer BidListId;
-    @NotBlank(message = "Account is mandatory")
     private String account;
-    @NotBlank(message = "Type is mandatory")
     private String type;
-    @Positive(message = "Bid quantity must be positive")
     private double bidQuantity;
     private double askQuantity;
     private double bid;
@@ -50,9 +47,24 @@ public class BidList {
     }
 
     public BidList(Integer bidListId, String account, String type, double bidQuantity) {
-        BidListId = bidListId;
+        this.BidListId = bidListId;
         this.account = account;
         this.type = type;
         this.bidQuantity = bidQuantity;
+    }
+
+    public BidList(BidListDto bidListDto) {
+        this.BidListId = bidListDto.getBidListId();
+        this.account = bidListDto.getAccount();
+        this.type = bidListDto.getType();
+        this.bidQuantity = bidListDto.getBidQuantity();
+    }
+
+    public void updateFromDto(BidListDto bidListDto) {
+        if (bidListDto.getBidListId().equals(this.BidListId)) {
+            this.setAccount(bidListDto.getAccount());
+            this.setType(bidListDto.getType());
+            this.setBidQuantity(bidListDto.getBidQuantity());
+        }
     }
 }

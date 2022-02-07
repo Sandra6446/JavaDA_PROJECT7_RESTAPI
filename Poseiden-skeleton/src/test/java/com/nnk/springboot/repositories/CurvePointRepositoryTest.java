@@ -1,7 +1,6 @@
-package com.nnk.springboot;
+package com.nnk.springboot.repositories;
 
-import com.nnk.springboot.domain.CurvePoint;
-import com.nnk.springboot.repositories.CurvePointRepository;
+import com.nnk.springboot.domain.entity.CurvePoint;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,10 +10,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 import java.util.Optional;
-/*
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CurvePointTests {
+public class CurvePointRepositoryTest {
 
 	@Autowired
 	private CurvePointRepository curvePointRepository;
@@ -43,7 +42,4 @@ public class CurvePointTests {
 		Optional<CurvePoint> curvePointList = curvePointRepository.findById(id);
 		Assert.assertFalse(curvePointList.isPresent());
 	}
-
 }
-
- */

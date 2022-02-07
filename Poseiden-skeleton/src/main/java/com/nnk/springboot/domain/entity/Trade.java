@@ -1,8 +1,7 @@
-package com.nnk.springboot.domain;
+package com.nnk.springboot.domain.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
