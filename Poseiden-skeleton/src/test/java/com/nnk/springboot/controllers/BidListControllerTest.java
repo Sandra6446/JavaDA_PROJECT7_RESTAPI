@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(BidListController.class)
 @AutoConfigureMockMvc(secure = false)
+@ActiveProfiles("test")
 public class BidListControllerTest {
 
     @Autowired
@@ -40,10 +42,9 @@ public class BidListControllerTest {
 
         bidListDto = new BidListDto(1, "Account name", "type", 5d);
 
-        BidListDto bidListDto1 = new BidListDto(1, "First bidList", "Type 1", 20.0);
-        BidListDto bidListDto2 = new BidListDto(2, "Second bidList", "Type 2", 10.0);
-        BidListDto bidListDto3 = new BidListDto(3, "Third bidList", "Type 3", 5.0);
-        bidListDtos = Arrays.asList(bidListDto1, bidListDto2, bidListDto3);
+        BidListDto bidListDto2 = new BidListDto(2, "Second bidList", "Type 2", 10d);
+        BidListDto bidListDto3 = new BidListDto(3, "Third bidList", "Type 3", 5d);
+        bidListDtos = Arrays.asList(bidListDto, bidListDto2, bidListDto3);
     }
 
     @Test
@@ -55,9 +56,9 @@ public class BidListControllerTest {
                 .andExpect(model().attribute("bidListDto", hasSize(3)))
                 .andExpect(model().attribute("bidListDto", hasItem(
                         allOf(
-                                hasProperty("account", is("First bidList")),
-                                hasProperty("type", is("Type 1")),
-                                hasProperty("bidQuantity", is(20.0))
+                                hasProperty("account", is("Second bidList")),
+                                hasProperty("type", is("Type 2")),
+                                hasProperty("bidQuantity", is(10d))
                         )
                 )));
     }
@@ -127,7 +128,7 @@ public class BidListControllerTest {
     public void deleteBid() throws Exception {
         Mockito.doNothing().when(Mockito.spy(bidListService)).delete(ArgumentMatchers.anyInt());
         Mockito.when(bidListService.getAll()).thenReturn(bidListDtos);
-        mockMvc.perform(MockMvcRequestBuilders.get("/bidList/delete/{id}",1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/bidList/delete/{id}", 1))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/bidList/list"));
     }

@@ -3,7 +3,6 @@ package com.nnk.springboot.service;
 import com.nnk.springboot.domain.dto.RatingDto;
 import com.nnk.springboot.domain.entity.Rating;
 import com.nnk.springboot.repositories.RatingRepository;
-import lombok.AllArgsConstructor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +11,8 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.stereotype.Service;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +23,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("test")
 public class RatingServiceTest {
 
     private RatingService ratingService;

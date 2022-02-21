@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(RatingController.class)
 @AutoConfigureMockMvc(secure = false)
+@ActiveProfiles("test")
 public class RatingControllerTest {
 
     @Autowired
@@ -37,14 +39,13 @@ public class RatingControllerTest {
 
     @Before
     public void setUp() {
-        ratingDto = new RatingDto(1,"MR","SPR","FR",1);
+        ratingDto = new RatingDto(1, "MR", "SPR", "FR", 1);
 
-        RatingDto ratingDto1 = new RatingDto(1,"MR1","SPR1","FR1",1);
-        RatingDto ratingDto2 = new RatingDto(2,"MR2","SPR2","FR2",2);
-        RatingDto ratingDto3 = new RatingDto(3,"MR3","SPR3","FR3",3);
-        ratingDtos = Arrays.asList(ratingDto1, ratingDto2, ratingDto3);
+        RatingDto ratingDto2 = new RatingDto(2, "MR2", "SPR2", "FR2", 2);
+        RatingDto ratingDto3 = new RatingDto(3, "MR3", "SPR3", "FR3", 3);
+        ratingDtos = Arrays.asList(ratingDto, ratingDto2, ratingDto3);
     }
-    
+
     @Test
     public void home() throws Exception {
         Mockito.when(ratingService.getAll()).thenReturn(ratingDtos);
@@ -54,10 +55,10 @@ public class RatingControllerTest {
                 .andExpect(model().attribute("ratingDto", hasSize(3)))
                 .andExpect(model().attribute("ratingDto", hasItem(
                         allOf(
-                                hasProperty("moodysRating", is("MR1")),
-                                hasProperty("sandPRating", is("SPR1")),
-                                hasProperty("fitchRating", is("FR1")),
-                                hasProperty("orderNumber", is(1))
+                                hasProperty("moodysRating", is("MR2")),
+                                hasProperty("sandPRating", is("SPR2")),
+                                hasProperty("fitchRating", is("FR2")),
+                                hasProperty("orderNumber", is(2))
                         )
                 )));
     }
@@ -90,7 +91,7 @@ public class RatingControllerTest {
                 .andExpect(view().name("rating/add"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/rating/validate")
-                        .param("moodysRating", "")
+                        .param("moodysRating", ratingDto.getMoodysRating())
                         .param("sandPRating", ratingDto.getSandPRating())
                         .param("fitchRating", ratingDto.getFitchRating())
                         .param("orderNumber", String.valueOf(0)))
@@ -132,7 +133,7 @@ public class RatingControllerTest {
     public void deleteRating() throws Exception {
         Mockito.doNothing().when(Mockito.spy(ratingService)).delete(ArgumentMatchers.anyInt());
         Mockito.when(ratingService.getAll()).thenReturn(ratingDtos);
-        mockMvc.perform(MockMvcRequestBuilders.get("/rating/delete/{id}",1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/rating/delete/{id}", 1))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/rating/list"));
     }

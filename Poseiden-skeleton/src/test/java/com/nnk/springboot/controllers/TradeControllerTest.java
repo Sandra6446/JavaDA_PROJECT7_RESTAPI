@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(TradeController.class)
 @AutoConfigureMockMvc(secure = false)
+@ActiveProfiles("test")
 public class TradeControllerTest {
 
     @Autowired
@@ -40,10 +42,9 @@ public class TradeControllerTest {
 
         tradeDto = new TradeDto(1, "Account name", "type", 5d);
 
-        TradeDto tradeDto1 = new TradeDto(1, "First trade", "Type 1", 20.0);
-        TradeDto tradeDto2 = new TradeDto(2, "Second trade", "Type 2", 10.0);
-        TradeDto tradeDto3 = new TradeDto(3, "Third trade", "Type 3", 5.0);
-        tradeDtos = Arrays.asList(tradeDto1, tradeDto2, tradeDto3);
+        TradeDto tradeDto2 = new TradeDto(2, "Second trade", "Type 2", 10d);
+        TradeDto tradeDto3 = new TradeDto(3, "Third trade", "Type 3", 5d);
+        tradeDtos = Arrays.asList(tradeDto, tradeDto2, tradeDto3);
     }
 
     @Test
@@ -55,9 +56,9 @@ public class TradeControllerTest {
                 .andExpect(model().attribute("tradeDto", hasSize(3)))
                 .andExpect(model().attribute("tradeDto", hasItem(
                         allOf(
-                                hasProperty("account", is("First trade")),
-                                hasProperty("type", is("Type 1")),
-                                hasProperty("buyQuantity", is(20.0))
+                                hasProperty("account", is("Second trade")),
+                                hasProperty("type", is("Type 2")),
+                                hasProperty("buyQuantity", is(10d))
                         )
                 )));
     }

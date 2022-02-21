@@ -12,6 +12,8 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 public class BidListDto {
 
+    // TODO : Faire un tour des champs obligatoires
+
     private Integer BidListId;
     @NotBlank(message = "Account is mandatory")
     private String account;

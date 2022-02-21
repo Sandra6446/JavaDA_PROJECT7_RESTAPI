@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -24,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @WebMvcTest(CurveController.class)
 @AutoConfigureMockMvc(secure = false)
+@ActiveProfiles("test")
 public class CurveControllerTest {
 
     @Autowired
@@ -39,10 +41,9 @@ public class CurveControllerTest {
     public void setUp() {
         curvePointDto = new CurvePointDto(4, 5, 10d, 5d);
 
-        CurvePointDto curvePointDto1 = new CurvePointDto(1, 12, 20d, 20d);
         CurvePointDto curvePointDto2 = new CurvePointDto(2, 10, 10d, 5d);
         CurvePointDto curvePointDto3 = new CurvePointDto(3, 3, 10d, 10d);
-        curvePointDtos = Arrays.asList(curvePointDto1, curvePointDto2, curvePointDto3);
+        curvePointDtos = Arrays.asList(curvePointDto, curvePointDto2, curvePointDto3);
     }
 
     @Test
@@ -54,9 +55,9 @@ public class CurveControllerTest {
                 .andExpect(model().attribute("curvePointDto", hasSize(3)))
                 .andExpect(model().attribute("curvePointDto", hasItem(
                         allOf(
-                                hasProperty("curveId", is(12)),
-                                hasProperty("term", is(20d)),
-                                hasProperty("value", is(20d))
+                                hasProperty("curveId", is(10)),
+                                hasProperty("term", is(10d)),
+                                hasProperty("value", is(5d))
                         )
                 )));
     }
