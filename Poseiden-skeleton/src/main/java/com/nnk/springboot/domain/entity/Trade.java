@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 public class Trade {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer TradeId;
     private String account;
     private String type;

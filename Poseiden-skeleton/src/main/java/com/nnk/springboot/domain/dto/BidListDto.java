@@ -1,7 +1,9 @@
 package com.nnk.springboot.domain.dto;
 
 import com.nnk.springboot.domain.entity.BidList;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

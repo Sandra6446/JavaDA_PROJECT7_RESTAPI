@@ -1,7 +1,6 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.dto.TradeDto;
-import com.nnk.springboot.domain.entity.Trade;
 import com.nnk.springboot.service.TradeService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,8 +24,7 @@ public class TradeController {
     TradeService tradeService;
 
     @RequestMapping("/trade/list")
-    public String home(Model model)
-    {
+    public String home(Model model) {
         model.addAttribute("tradeDto", tradeService.getAll());
         return "trade/list";
     }
@@ -56,7 +54,7 @@ public class TradeController {
 
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable("id") Integer id, @Valid TradeDto tradeDto,
-                             BindingResult result, Model model) {
+                              BindingResult result, Model model) {
         tradeDto.setTradeId(id);
         if (result.hasErrors()) {
             logger.error(result.getAllErrors());

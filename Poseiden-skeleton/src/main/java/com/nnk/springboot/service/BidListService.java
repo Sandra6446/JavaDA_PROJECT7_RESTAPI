@@ -1,7 +1,7 @@
 package com.nnk.springboot.service;
 
-import com.nnk.springboot.domain.entity.BidList;
 import com.nnk.springboot.domain.dto.BidListDto;
+import com.nnk.springboot.domain.entity.BidList;
 import com.nnk.springboot.repositories.BidListRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @Transactional
 @AllArgsConstructor
-public class BidListService implements CrudService <BidListDto> {
+public class BidListService implements CrudService<BidListDto> {
 
     @Autowired
     private BidListRepository bidListRepository;

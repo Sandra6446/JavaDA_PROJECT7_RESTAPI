@@ -24,8 +24,7 @@ public class CurveController {
     CurvePointService curvePointService;
 
     @RequestMapping("/curvePoint/list")
-    public String home(Model model)
-    {
+    public String home(Model model) {
         model.addAttribute("curvePointDto", curvePointService.getAll());
         return "curvePoint/list";
     }
@@ -55,7 +54,7 @@ public class CurveController {
 
     @PostMapping("/curvePoint/update/{id}")
     public String updateBid(@PathVariable("id") Integer id, @Valid CurvePointDto curvePointDto,
-                             BindingResult result, Model model) {
+                            BindingResult result, Model model) {
         curvePointDto.setId(id);
         if (result.hasErrors()) {
             logger.error(result.getAllErrors());
