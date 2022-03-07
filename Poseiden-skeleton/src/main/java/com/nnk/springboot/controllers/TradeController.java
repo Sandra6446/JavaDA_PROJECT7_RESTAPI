@@ -1,7 +1,6 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.dto.TradeDto;
-import com.nnk.springboot.domain.entity.Trade;
 import com.nnk.springboot.service.TradeService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,9 +24,8 @@ public class TradeController {
     TradeService tradeService;
 
     @RequestMapping("/trade/list")
-    public String home(Model model)
-    {
-        model.addAttribute("tradeDto", tradeService.getAll());
+    public String home(Model model) {
+        model.addAttribute("trades", tradeService.getAll());
         return "trade/list";
     }
 
@@ -56,14 +54,14 @@ public class TradeController {
 
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable("id") Integer id, @Valid TradeDto tradeDto,
-                             BindingResult result, Model model) {
+                              BindingResult result, Model model) {
         tradeDto.setTradeId(id);
         if (result.hasErrors()) {
             logger.error(result.getAllErrors());
             return "trade/update";
         }
         tradeService.update(tradeDto);
-        model.addAttribute("tradeDto", tradeService.getAll());
+        model.addAttribute("trades", tradeService.getAll());
         logger.info(String.format("Trade %s updated", id));
         return "redirect:/trade/list";
     }
@@ -71,7 +69,7 @@ public class TradeController {
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         tradeService.delete(id);
-        model.addAttribute("tradeDto", tradeService.getAll());
+        model.addAttribute("trades", tradeService.getAll());
         logger.info(String.format("Trade %s deleted", id));
         return "redirect:/trade/list";
     }

@@ -32,20 +32,23 @@ public class CurvePointServiceTest {
     private CurvePointRepository curvePointRepository;
 
     private List<CurvePoint> curvePoints;
+    private CurvePoint curvePoint;
     private List<CurvePointDto> curvePointDtos;
+    private CurvePointDto curvePointDto;
 
     @Before
     public void setUp() {
-        CurvePoint curvePoint1 = new CurvePoint(1, 5,10d,20d);
+        curvePoint = new CurvePoint(1, 5,10d,20d);
         CurvePoint curvePoint2 = new CurvePoint(2, 6, 10d,10d);
         CurvePoint curvePoint3 = new CurvePoint(3, 10,10.5,0.0);
-        curvePoints = Arrays.asList(curvePoint1, curvePoint2, curvePoint3);
-        curvePointService = new CurvePointService(curvePointRepository);
+        curvePoints = Arrays.asList(curvePoint, curvePoint2, curvePoint3);
 
-        CurvePointDto curvePointDto1 = new CurvePointDto(1, 5,10d,20d);
-        CurvePointDto curvePointDto2 = new CurvePointDto(2, 6, 10d,10d);
-        CurvePointDto curvePointDto3 = new CurvePointDto(3, 10,10.5,0.0);
-        curvePointDtos = Arrays.asList(curvePointDto1, curvePointDto2, curvePointDto3);
+        curvePointDto = new CurvePointDto(curvePoint);
+        CurvePointDto curvePointDto2 = new CurvePointDto(curvePoint2);
+        CurvePointDto curvePointDto3 = new CurvePointDto(curvePoint3);
+        curvePointDtos = Arrays.asList(curvePointDto, curvePointDto2, curvePointDto3);
+
+        curvePointService = new CurvePointService(curvePointRepository);
     }
 
     @Test
@@ -62,8 +65,7 @@ public class CurvePointServiceTest {
 
     @Test
     public void getById() {
-        CurvePointDto curvePointDto = new CurvePointDto(1, 5,10d,20d);
-        Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoints.get(0)));
+        Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoint));
         Assert.assertEquals(curvePointDto, curvePointService.getById(1));
     }
 
@@ -75,16 +77,13 @@ public class CurvePointServiceTest {
 
     @Test
     public void save() {
-        CurvePointDto curvePointDto = curvePointDtos.get(0);
-        CurvePoint curvePoint = curvePoints.get(0);
+        CurvePoint curvePointToSave = new CurvePoint(5,10d,20d);
         curvePointService.save(curvePointDto);
-        verify(curvePointRepository,times(1)).saveAndFlush(curvePoint);
+        verify(curvePointRepository,times(1)).saveAndFlush(curvePointToSave);
     }
 
     @Test
     public void update() {
-        CurvePointDto curvePointDto = curvePointDtos.get(0);
-        CurvePoint curvePoint = curvePoints.get(0);
         Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoint));
         curvePointService.update(curvePointDto);
         verify(curvePointRepository,times(1)).saveAndFlush(curvePoint);
@@ -93,12 +92,12 @@ public class CurvePointServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void whenExceptionThrown_update() {
         Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
-        curvePointService.update(curvePointDtos.get(0));
+        curvePointService.update(curvePointDto);
     }
 
     @Test
     public void delete() {
-        Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoints.get(0)));
+        Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoint));
         curvePointService.delete(1);
         verify(curvePointRepository,times(1)).deleteById(1);
     }

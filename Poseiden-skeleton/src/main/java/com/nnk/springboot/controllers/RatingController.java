@@ -1,7 +1,6 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.dto.RatingDto;
-import com.nnk.springboot.domain.entity.Rating;
 import com.nnk.springboot.service.RatingService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,8 +24,7 @@ public class RatingController {
     RatingService ratingService;
 
     @RequestMapping("/rating/list")
-    public String home(Model model)
-    {
+    public String home(Model model) {
         model.addAttribute("ratingDto", ratingService.getAll());
         return "rating/list";
     }
@@ -56,7 +54,7 @@ public class RatingController {
 
     @PostMapping("/rating/update/{id}")
     public String updateRating(@PathVariable("id") Integer id, @Valid RatingDto ratingDto,
-                             BindingResult result, Model model) {
+                               BindingResult result, Model model) {
         ratingDto.setId(id);
         if (result.hasErrors()) {
             logger.error(result.getAllErrors());

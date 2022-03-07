@@ -14,39 +14,54 @@ import java.sql.Timestamp;
 public class CurvePoint {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer curveId;
     private Timestamp asOfDate;
-    private double term;
-    private double value;
+    private Double term;
+    private Double value;
     private Timestamp creationDate;
 
-    public CurvePoint(Integer curveId, double term, double value) {
+    public CurvePoint(Integer curveId, Double term, Double value) {
         this.curveId = curveId;
         this.term = term;
         this.value = value;
     }
 
-    public CurvePoint(CurvePointDto curvePointDto) {
-        this.id = curvePointDto.getId();
-        this.curveId = curvePointDto.getCurveId();
-        this.term = curvePointDto.getTerm();
-        this.value = curvePointDto.getValue();
-    }
-
-    public CurvePoint(Integer id, Integer curveId, double term, double value) {
+    public CurvePoint(Integer id, Integer curveId, Double term, Double value) {
         this.id = id;
         this.curveId = curveId;
         this.term = term;
         this.value = value;
     }
 
+    public CurvePoint(CurvePointDto curvePointDto) {
+        this.curveId = curvePointDto.getCurveId();
+        if (curvePointDto.getTerm() == null) {
+            this.setTerm(0d);
+        } else {
+            this.setTerm(curvePointDto.getTerm());
+        }
+        if (curvePointDto.getValue() == null) {
+            this.setValue(0d);
+        } else {
+            this.setValue(curvePointDto.getValue());
+        }
+    }
+
     public void updateFromDto(CurvePointDto curvePointDto) {
         if (curvePointDto.getId().equals(this.id)) {
             this.setCurveId(curvePointDto.getCurveId());
-            this.setTerm(curvePointDto.getTerm());
-            this.setValue(curvePointDto.getValue());
+            if (curvePointDto.getTerm() == null) {
+                this.setTerm(0d);
+            } else {
+                this.setTerm(curvePointDto.getTerm());
+            }
+            if (curvePointDto.getValue() == null) {
+                this.setValue(0d);
+            } else {
+                this.setValue(curvePointDto.getValue());
+            }
         }
     }
 }

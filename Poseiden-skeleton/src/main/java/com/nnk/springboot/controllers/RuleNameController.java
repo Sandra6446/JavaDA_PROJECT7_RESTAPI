@@ -1,7 +1,6 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.dto.RuleNameDto;
-import com.nnk.springboot.domain.entity.RuleName;
 import com.nnk.springboot.service.RuleNameService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,8 +24,7 @@ public class RuleNameController {
     private RuleNameService ruleNameService;
 
     @RequestMapping("/ruleName/list")
-    public String home(Model model)
-    {
+    public String home(Model model) {
         model.addAttribute("ruleNameDto", ruleNameService.getAll());
         return "ruleName/list";
     }
@@ -57,7 +55,7 @@ public class RuleNameController {
 
     @PostMapping("/ruleName/update/{id}")
     public String updateRuleName(@PathVariable("id") Integer id, @Valid RuleNameDto ruleNameDto,
-                             BindingResult result, Model model) {
+                                 BindingResult result, Model model) {
         ruleNameDto.setId(id);
         if (result.hasErrors()) {
             logger.error(result.getAllErrors());

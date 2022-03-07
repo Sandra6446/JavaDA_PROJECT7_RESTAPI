@@ -19,8 +19,7 @@ public class TradeDto {
     private String account;
     @NotBlank(message = "Type is mandatory")
     private String type;
-    @NotNull(message = "Bid quantity is mandatory")
-    @Positive(message = "Bid quantity must be positive")
+    @Positive(message = "Trade quantity must be positive")
     private Double buyQuantity;
 
     public TradeDto(Trade trade) {

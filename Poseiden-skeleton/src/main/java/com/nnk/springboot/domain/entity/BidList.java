@@ -20,10 +20,10 @@ public class BidList {
     private Integer BidListId;
     private String account;
     private String type;
-    private double bidQuantity;
-    private double askQuantity;
-    private double bid;
-    private double ask;
+    private Double bidQuantity;
+    private Double askQuantity;
+    private Double bid;
+    private Double ask;
     private String benchmark;
     private Timestamp bidListDate;
     private String commentary;
@@ -40,13 +40,13 @@ public class BidList {
     private String sourceListId;
     private String side;
 
-    public BidList(String account, String type, double bidQuantity) {
+    public BidList(String account, String type, Double bidQuantity) {
         this.account = account;
         this.type = type;
         this.bidQuantity = bidQuantity;
     }
 
-    public BidList(Integer bidListId, String account, String type, double bidQuantity) {
+    public BidList(Integer bidListId, String account, String type, Double bidQuantity) {
         this.BidListId = bidListId;
         this.account = account;
         this.type = type;
@@ -54,17 +54,24 @@ public class BidList {
     }
 
     public BidList(BidListDto bidListDto) {
-        this.BidListId = bidListDto.getBidListId();
         this.account = bidListDto.getAccount();
         this.type = bidListDto.getType();
-        this.bidQuantity = bidListDto.getBidQuantity();
+        if (bidListDto.getBidQuantity() == null) {
+            this.setBidQuantity(0d);
+        } else {
+            this.setBidQuantity(bidListDto.getBidQuantity());
+        }
     }
 
     public void updateFromDto(BidListDto bidListDto) {
         if (bidListDto.getBidListId().equals(this.BidListId)) {
             this.setAccount(bidListDto.getAccount());
             this.setType(bidListDto.getType());
-            this.setBidQuantity(bidListDto.getBidQuantity());
+            if (bidListDto.getBidQuantity() == null) {
+                this.setBidQuantity(0d);
+            } else {
+                this.setBidQuantity(bidListDto.getBidQuantity());
+            }
         }
     }
 }

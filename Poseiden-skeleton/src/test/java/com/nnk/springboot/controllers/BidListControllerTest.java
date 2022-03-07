@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,12 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(BidListController.class)
-@AutoConfigureMockMvc(secure = false)
 @ActiveProfiles("test")
+@WithMockUser
 public class BidListControllerTest {
 
     @Autowired
@@ -77,21 +78,24 @@ public class BidListControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/bidList/validate")
                         .param("account", bidListDto.getAccount())
                         .param("type", bidListDto.getType())
-                        .param("bidQuantity", String.valueOf(bidListDto.getBidQuantity())))
+                        .param("bidQuantity", String.valueOf(bidListDto.getBidQuantity()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/bidList/list"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/bidList/validate")
                         .param("account", "")
                         .param("type", bidListDto.getType())
-                        .param("bidQuantity", String.valueOf(bidListDto.getBidQuantity())))
+                        .param("bidQuantity", String.valueOf(bidListDto.getBidQuantity()))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("bidList/add"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/bidList/validate")
                         .param("account", bidListDto.getAccount())
                         .param("type", bidListDto.getType())
-                        .param("bidQuantity", String.valueOf(-20)))
+                        .param("bidQuantity", String.valueOf(-20))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("bidList/add"));
     }
@@ -112,14 +116,16 @@ public class BidListControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/bidList/update/{id}", 1)
                         .param("account", bidListDto.getAccount())
                         .param("type", bidListDto.getType())
-                        .param("bidQuantity", String.valueOf(bidListDto.getBidQuantity())))
+                        .param("bidQuantity", String.valueOf(bidListDto.getBidQuantity()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/bidList/list"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/bidList/update/{id}", 1)
                         .param("account", "")
                         .param("type", bidListDto.getType())
-                        .param("bidQuantity", String.valueOf(bidListDto.getBidQuantity())))
+                        .param("bidQuantity", String.valueOf(bidListDto.getBidQuantity()))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("bidList/update"));
     }

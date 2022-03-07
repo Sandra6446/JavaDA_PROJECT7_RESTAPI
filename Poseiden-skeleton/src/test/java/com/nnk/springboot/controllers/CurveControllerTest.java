@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,12 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(CurveController.class)
-@AutoConfigureMockMvc(secure = false)
 @ActiveProfiles("test")
+@WithMockUser
 public class CurveControllerTest {
 
     @Autowired
@@ -76,21 +77,24 @@ public class CurveControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/curvePoint/validate")
                         .param("curveId", String.valueOf(curvePointDto.getCurveId()))
                         .param("term", String.valueOf(curvePointDto.getTerm()))
-                        .param("value", String.valueOf(curvePointDto.getValue())))
+                        .param("value", String.valueOf(curvePointDto.getValue()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/curvePoint/list"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/curvePoint/validate")
-                        .param("curveId", String.valueOf(-20))
+                        .param("curveId", "")
                         .param("term", String.valueOf(curvePointDto.getTerm()))
-                        .param("value", String.valueOf(curvePointDto.getValue())))
+                        .param("value", String.valueOf(curvePointDto.getValue()))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("curvePoint/add"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/curvePoint/validate")
                         .param("curveId", String.valueOf(curvePointDto.getCurveId()))
                         .param("term", String.valueOf(curvePointDto.getTerm()))
-                        .param("value", ""))
+                        .param("value", "-1")
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("curvePoint/add"));
     }
@@ -111,14 +115,16 @@ public class CurveControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/curvePoint/update/{id}", 1)
                         .param("curveId", String.valueOf(curvePointDto.getCurveId()))
                         .param("term", String.valueOf(curvePointDto.getTerm()))
-                        .param("value", String.valueOf(curvePointDto.getValue())))
+                        .param("value", String.valueOf(curvePointDto.getValue()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/curvePoint/list"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/curvePoint/update/{id}", 1)
                         .param("curveId", String.valueOf(curvePointDto.getCurveId()))
                         .param("term", String.valueOf(curvePointDto.getTerm()))
-                        .param("value", ""))
+                        .param("value", "-1")
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("curvePoint/update"));
     }

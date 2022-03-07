@@ -32,20 +32,23 @@ public class TradeServiceTest {
     private TradeRepository tradeRepository;
 
     private List<Trade> trades;
+    private Trade trade;
     private List<TradeDto> tradeDtos;
+    private TradeDto tradeDto;
 
     @Before
     public void setUp() {
-        Trade trade1 = new Trade(1, "First trade", "Type 1", 20.0);
+        trade = new Trade(1, "First trade", "Type 1", 20.0);
         Trade trade2 = new Trade(2, "Second trade", "Type 2", 10.0);
         Trade trade3 = new Trade(3, "Third trade", "Type 3", 5.0);
-        trades = Arrays.asList(trade1, trade2, trade3);
-        tradeService = new TradeService(tradeRepository);
+        trades = Arrays.asList(trade, trade2, trade3);
 
-        TradeDto tradeDto1 = new TradeDto(1, "First trade", "Type 1", 20.0);
-        TradeDto tradeDto2 = new TradeDto(2, "Second trade", "Type 2", 10.0);
-        TradeDto tradeDto3 = new TradeDto(3, "Third trade", "Type 3", 5.0);
-        tradeDtos = Arrays.asList(tradeDto1, tradeDto2, tradeDto3);
+        tradeDto = new TradeDto(trade);
+        TradeDto tradeDto2 = new TradeDto(trade2);
+        TradeDto tradeDto3 = new TradeDto(trade3);
+        tradeDtos = Arrays.asList(tradeDto, tradeDto2, tradeDto3);
+
+        tradeService = new TradeService(tradeRepository);
     }
 
     @Test
@@ -62,8 +65,7 @@ public class TradeServiceTest {
 
     @Test
     public void getById() {
-        TradeDto tradeDto = new TradeDto(1, "First trade", "Type 1", 20.0);
-        Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trades.get(0)));
+        Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trade));
         Assert.assertEquals(tradeDto, tradeService.getById(1));
     }
 
@@ -75,16 +77,13 @@ public class TradeServiceTest {
 
     @Test
     public void save() {
-        TradeDto tradeDto = tradeDtos.get(0);
-        Trade trade = trades.get(0);
+        Trade tradeToSave = new Trade("First trade", "Type 1", 20.0);
         tradeService.save(tradeDto);
-        verify(tradeRepository,times(1)).saveAndFlush(trade);
+        verify(tradeRepository,times(1)).saveAndFlush(tradeToSave);
     }
 
     @Test
     public void update() {
-        TradeDto tradeDto = tradeDtos.get(0);
-        Trade trade = trades.get(0);
         Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trade));
         tradeService.update(tradeDto);
         verify(tradeRepository,times(1)).saveAndFlush(trade);
@@ -93,12 +92,12 @@ public class TradeServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void whenExceptionThrown_update() {
         Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
-        tradeService.update(tradeDtos.get(0));
+        tradeService.update(tradeDto);
     }
 
     @Test
     public void delete() {
-        Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trades.get(0)));
+        Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trade));
         tradeService.delete(1);
         verify(tradeRepository,times(1)).deleteById(1);
     }

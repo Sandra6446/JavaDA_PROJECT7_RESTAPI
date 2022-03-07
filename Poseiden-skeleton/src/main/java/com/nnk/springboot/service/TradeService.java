@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 @Transactional
 @AllArgsConstructor
-public class TradeService implements CrudService <TradeDto> {
+public class TradeService implements CrudService<TradeDto> {
 
     @Autowired
     private TradeRepository tradeRepository;
