@@ -32,20 +32,23 @@ public class RatingServiceTest {
     private RatingRepository ratingRepository;
 
     private List<Rating> ratings;
+    private Rating rating;
     private List<RatingDto> ratingDtos;
+    private RatingDto ratingDto;
 
     @Before
     public void setUp() {
-        Rating rating1 = new Rating(1,"MR1","SPR1","FR1",1);
-        Rating rating2 = new Rating(2,"MR2","SPR2","FR2",2);
-        Rating rating3 = new Rating(3,"MR3","SPR3","FR3",3);
-        ratings = Arrays.asList(rating1, rating2, rating3);
-        ratingService = new RatingService(ratingRepository);
+        rating = new Rating(1, "MR1", "SPR1", "FR1", 1);
+        Rating rating2 = new Rating(2, "MR2", "SPR2", "FR2", 2);
+        Rating rating3 = new Rating(3, "MR3", "SPR3", "FR3", 3);
+        ratings = Arrays.asList(rating, rating2, rating3);
 
-        RatingDto ratingDto1 = new RatingDto(1,"MR1","SPR1","FR1",1);
-        RatingDto ratingDto2 = new RatingDto(2,"MR2","SPR2","FR2",2);
-        RatingDto ratingDto3 = new RatingDto(3,"MR3","SPR3","FR3",3);
-        ratingDtos = Arrays.asList(ratingDto1, ratingDto2, ratingDto3);
+        ratingDto = new RatingDto(rating);
+        RatingDto ratingDto2 = new RatingDto(rating2);
+        RatingDto ratingDto3 = new RatingDto(rating3);
+        ratingDtos = Arrays.asList(ratingDto, ratingDto2, ratingDto3);
+
+        ratingService = new RatingService(ratingRepository);
     }
 
     @Test
@@ -62,8 +65,7 @@ public class RatingServiceTest {
 
     @Test
     public void getById() {
-        RatingDto ratingDto = new RatingDto(1,"MR1","SPR1","FR1",1);
-        Mockito.when(ratingRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(ratings.get(0)));
+        Mockito.when(ratingRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(rating));
         Assert.assertEquals(ratingDto, ratingService.getById(1));
     }
 
@@ -75,32 +77,29 @@ public class RatingServiceTest {
 
     @Test
     public void save() {
-        RatingDto ratingDto = ratingDtos.get(0);
-        Rating rating = ratings.get(0);
+        Rating ratingToSave = new Rating("MR1", "SPR1", "FR1", 1);
         ratingService.save(ratingDto);
-        verify(ratingRepository,times(1)).saveAndFlush(rating);
+        verify(ratingRepository, times(1)).saveAndFlush(ratingToSave);
     }
 
     @Test
     public void update() {
-        RatingDto ratingDto = ratingDtos.get(0);
-        Rating rating = ratings.get(0);
         Mockito.when(ratingRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(rating));
         ratingService.update(ratingDto);
-        verify(ratingRepository,times(1)).saveAndFlush(rating);
+        verify(ratingRepository, times(1)).saveAndFlush(rating);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void whenExceptionThrown_update() {
         Mockito.when(ratingRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
-        ratingService.update(ratingDtos.get(0));
+        ratingService.update(ratingDto);
     }
 
     @Test
     public void delete() {
-        Mockito.when(ratingRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(ratings.get(0)));
+        Mockito.when(ratingRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(rating));
         ratingService.delete(1);
-        verify(ratingRepository,times(1)).deleteById(1);
+        verify(ratingRepository, times(1)).deleteById(1);
     }
 
     @Test(expected = IllegalArgumentException.class)

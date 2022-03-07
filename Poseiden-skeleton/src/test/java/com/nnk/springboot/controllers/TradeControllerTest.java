@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,12 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(TradeController.class)
-@AutoConfigureMockMvc(secure = false)
 @ActiveProfiles("test")
+@WithMockUser
 public class TradeControllerTest {
 
     @Autowired
@@ -53,8 +55,8 @@ public class TradeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/trade/list"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("trade/list"))
-                .andExpect(model().attribute("tradeDto", hasSize(3)))
-                .andExpect(model().attribute("tradeDto", hasItem(
+                .andExpect(model().attribute("trades", hasSize(3)))
+                .andExpect(model().attribute("trades", hasItem(
                         allOf(
                                 hasProperty("account", is("Second trade")),
                                 hasProperty("type", is("Type 2")),
@@ -77,21 +79,24 @@ public class TradeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/trade/validate")
                         .param("account", tradeDto.getAccount())
                         .param("type", tradeDto.getType())
-                        .param("buyQuantity", String.valueOf(tradeDto.getBuyQuantity())))
+                        .param("buyQuantity", String.valueOf(tradeDto.getBuyQuantity()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/trade/list"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/trade/validate")
                         .param("account", "")
                         .param("type", tradeDto.getType())
-                        .param("buyQuantity", String.valueOf(tradeDto.getBuyQuantity())))
+                        .param("buyQuantity", String.valueOf(tradeDto.getBuyQuantity()))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("trade/add"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/trade/validate")
                         .param("account", tradeDto.getAccount())
                         .param("type", tradeDto.getType())
-                        .param("buyQuantity", String.valueOf(-20)))
+                        .param("buyQuantity", String.valueOf(-20))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("trade/add"));
     }
@@ -112,14 +117,16 @@ public class TradeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/trade/update/{id}", 1)
                         .param("account", tradeDto.getAccount())
                         .param("type", tradeDto.getType())
-                        .param("buyQuantity", String.valueOf(tradeDto.getBuyQuantity())))
+                        .param("buyQuantity", String.valueOf(tradeDto.getBuyQuantity()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/trade/list"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/trade/update/{id}", 1)
                         .param("account", "")
                         .param("type", tradeDto.getType())
-                        .param("buyQuantity", String.valueOf(tradeDto.getBuyQuantity())))
+                        .param("buyQuantity", String.valueOf(tradeDto.getBuyQuantity()))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("trade/update"));
     }

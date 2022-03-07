@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,12 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RatingController.class)
-@AutoConfigureMockMvc(secure = false)
 @ActiveProfiles("test")
+@WithMockUser
 public class RatingControllerTest {
 
     @Autowired
@@ -78,7 +80,8 @@ public class RatingControllerTest {
                         .param("moodysRating", ratingDto.getMoodysRating())
                         .param("sandPRating", ratingDto.getSandPRating())
                         .param("fitchRating", ratingDto.getFitchRating())
-                        .param("orderNumber", String.valueOf(ratingDto.getOrderNumber())))
+                        .param("orderNumber", String.valueOf(ratingDto.getOrderNumber()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/rating/list"));
 
@@ -86,7 +89,8 @@ public class RatingControllerTest {
                         .param("moodysRating", "")
                         .param("sandPRating", ratingDto.getSandPRating())
                         .param("fitchRating", ratingDto.getFitchRating())
-                        .param("orderNumber", String.valueOf(ratingDto.getOrderNumber())))
+                        .param("orderNumber", String.valueOf(ratingDto.getOrderNumber()))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("rating/add"));
 
@@ -94,7 +98,8 @@ public class RatingControllerTest {
                         .param("moodysRating", ratingDto.getMoodysRating())
                         .param("sandPRating", ratingDto.getSandPRating())
                         .param("fitchRating", ratingDto.getFitchRating())
-                        .param("orderNumber", String.valueOf(0)))
+                        .param("orderNumber", String.valueOf(0))
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("rating/add"));
     }
@@ -116,7 +121,8 @@ public class RatingControllerTest {
                         .param("moodysRating", ratingDto.getMoodysRating())
                         .param("sandPRating", ratingDto.getSandPRating())
                         .param("fitchRating", ratingDto.getFitchRating())
-                        .param("orderNumber", String.valueOf(ratingDto.getOrderNumber())))
+                        .param("orderNumber", String.valueOf(ratingDto.getOrderNumber()))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/rating/list"));
 
@@ -124,7 +130,8 @@ public class RatingControllerTest {
                         .param("moodysRating", ratingDto.getMoodysRating())
                         .param("sandPRating", ratingDto.getSandPRating())
                         .param("fitchRating", ratingDto.getFitchRating())
-                        .param("orderNumber", ""))
+                        .param("orderNumber", "")
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("rating/update"));
     }

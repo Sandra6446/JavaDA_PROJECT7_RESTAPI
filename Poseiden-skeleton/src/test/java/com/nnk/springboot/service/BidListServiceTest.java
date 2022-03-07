@@ -32,20 +32,23 @@ public class BidListServiceTest {
     private BidListRepository bidListRepository;
 
     private List<BidList> bidLists;
+    private BidList bidList;
     private List<BidListDto> bidListDtos;
+    private BidListDto bidListDto;
 
     @Before
     public void setUp() {
-        BidList bidList1 = new BidList(1, "First bidList", "Type 1", 20.0);
-        BidList bidList2 = new BidList(2, "Second bidList", "Type 2", 10.0);
-        BidList bidList3 = new BidList(3, "Third bidList", "Type 3", 5.0);
-        bidLists = Arrays.asList(bidList1, bidList2, bidList3);
-        bidListService = new BidListService(bidListRepository);
+        bidList = new BidList(1,"First bidList", "Type 1", 20d);
+        BidList bidList2 = new BidList(2,"Second bidList", "Type 2", 10d);
+        BidList bidList3 = new BidList(3,"Third bidList", "Type 3", 5d);
+        bidLists = Arrays.asList(bidList, bidList2, bidList3);
 
-        BidListDto bidListDto1 = new BidListDto(1, "First bidList", "Type 1", 20.0);
-        BidListDto bidListDto2 = new BidListDto(2, "Second bidList", "Type 2", 10.0);
-        BidListDto bidListDto3 = new BidListDto(3, "Third bidList", "Type 3", 5.0);
-        bidListDtos = Arrays.asList(bidListDto1, bidListDto2, bidListDto3);
+        bidListDto = new BidListDto(bidList);
+        BidListDto bidListDto2 = new BidListDto(bidList2);
+        BidListDto bidListDto3 = new BidListDto(bidList3);
+        bidListDtos = Arrays.asList(bidListDto, bidListDto2, bidListDto3);
+
+        bidListService = new BidListService(bidListRepository);
     }
 
     @Test
@@ -62,8 +65,7 @@ public class BidListServiceTest {
 
     @Test
     public void getById() {
-        BidListDto bidListDto = new BidListDto(1, "First bidList", "Type 1", 20.0);
-        Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidLists.get(0)));
+        Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidList));
         Assert.assertEquals(bidListDto, bidListService.getById(1));
     }
 
@@ -75,16 +77,13 @@ public class BidListServiceTest {
 
     @Test
     public void save() {
-        BidListDto bidListDto = bidListDtos.get(0);
-        BidList bidList = bidLists.get(0);
+        BidList bidListToSave = new BidList("First bidList", "Type 1", 20d);
         bidListService.save(bidListDto);
-        verify(bidListRepository,times(1)).saveAndFlush(bidList);
+        verify(bidListRepository,times(1)).saveAndFlush(bidListToSave);
     }
 
     @Test
     public void update() {
-        BidListDto bidListDto = bidListDtos.get(0);
-        BidList bidList = bidLists.get(0);
         Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidList));
         bidListService.update(bidListDto);
         verify(bidListRepository,times(1)).saveAndFlush(bidList);
@@ -93,12 +92,12 @@ public class BidListServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void whenExceptionThrown_update() {
         Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
-        bidListService.update(bidListDtos.get(0));
+        bidListService.update(bidListDto);
     }
 
     @Test
     public void delete() {
-        Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidLists.get(0)));
+        Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidList));
         bidListService.delete(1);
         verify(bidListRepository,times(1)).deleteById(1);
     }

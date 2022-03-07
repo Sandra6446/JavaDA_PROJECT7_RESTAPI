@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 @Data
 @NoArgsConstructor
@@ -21,8 +22,7 @@ public class BidListDto {
     private String account;
     @NotBlank(message = "Type is mandatory")
     private String type;
-    @NotNull(message = "Bid quantity is mandatory")
-    @Positive(message = "Bid quantity must be positive")
+    @PositiveOrZero(message = "Value must be greater than or equal to zero")
     private Double bidQuantity;
 
     public BidListDto(BidList bidList) {

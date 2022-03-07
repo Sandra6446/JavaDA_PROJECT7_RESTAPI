@@ -37,14 +37,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="tradeDto : ${tradeDto}">
-                <td style="width: 10%" th:text="${tradeDto.TradeId}"></td>
-                <td th:text="${tradeDto.account}"></td>
-                <td th:text="${tradeDto.type}"></td>
-                <td th:text="${tradeDto.buyQuantity}"></td>
+            <tr th:each="trade : ${trades}">
+                <td style="width: 10%" th:text="${trade.TradeId}"></td>
+                <td th:text="${trade.account}"></td>
+                <td th:text="${trade.type}"></td>
+                <td th:text="${trade.buyQuantity}"></td>
                 <td style="width: 15%" class="text-center">
-                    <a th:href="@{/trade/update/{id}(id=${tradeDto.TradeId})}">Edit</a>&nbsp;|&nbsp;
-                    <a th:href="@{/trade/delete/{id}(id=${tradeDto.TradeId})}">Delete</a>
+                    <a th:href="@{/trade/update/{id}(id=${trade.TradeId})}">Edit</a>&nbsp;|&nbsp;
+                    <a th:href="@{/trade/delete/{id}(id=${trade.TradeId})}">Delete</a>
                 </td>
             </tr>
             </tbody>

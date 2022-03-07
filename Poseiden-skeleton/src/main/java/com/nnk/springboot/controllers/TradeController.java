@@ -25,7 +25,7 @@ public class TradeController {
 
     @RequestMapping("/trade/list")
     public String home(Model model) {
-        model.addAttribute("tradeDto", tradeService.getAll());
+        model.addAttribute("trades", tradeService.getAll());
         return "trade/list";
     }
 
@@ -61,7 +61,7 @@ public class TradeController {
             return "trade/update";
         }
         tradeService.update(tradeDto);
-        model.addAttribute("tradeDto", tradeService.getAll());
+        model.addAttribute("trades", tradeService.getAll());
         logger.info(String.format("Trade %s updated", id));
         return "redirect:/trade/list";
     }
@@ -69,7 +69,7 @@ public class TradeController {
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         tradeService.delete(id);
-        model.addAttribute("tradeDto", tradeService.getAll());
+        model.addAttribute("trades", tradeService.getAll());
         logger.info(String.format("Trade %s deleted", id));
         return "redirect:/trade/list";
     }

@@ -18,10 +18,10 @@ public class Trade {
     private Integer TradeId;
     private String account;
     private String type;
-    private double buyQuantity;
-    private double sellQuantity;
-    private double buyPrice;
-    private double sellPrice;
+    private Double buyQuantity;
+    private Double sellQuantity;
+    private Double buyPrice;
+    private Double sellPrice;
     private Timestamp tradeDate;
     private String security;
     private String status;
@@ -51,17 +51,24 @@ public class Trade {
     }
 
     public Trade(TradeDto tradeDto) {
-        this.TradeId = tradeDto.getTradeId();
         this.account = tradeDto.getAccount();
         this.type = tradeDto.getType();
-        this.buyQuantity = tradeDto.getBuyQuantity();
+        if (tradeDto.getBuyQuantity() == null) {
+            this.setBuyQuantity(0d);
+        } else {
+            this.setBuyQuantity(tradeDto.getBuyQuantity());
+        }
     }
 
     public void updateFromDto(TradeDto tradeDto) {
         if (tradeDto.getTradeId().equals(this.TradeId)) {
             this.setAccount(tradeDto.getAccount());
             this.setType(tradeDto.getType());
-            this.setBuyQuantity(tradeDto.getBuyQuantity());
+            if (tradeDto.getBuyQuantity() == null) {
+                this.setBuyQuantity(0d);
+            } else {
+                this.setBuyQuantity(tradeDto.getBuyQuantity());
+            }
         }
     }
 }

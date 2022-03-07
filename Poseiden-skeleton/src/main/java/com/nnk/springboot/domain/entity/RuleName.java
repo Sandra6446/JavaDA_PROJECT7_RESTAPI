@@ -33,7 +33,6 @@ public class RuleName {
     }
 
     public RuleName(RuleNameDto ruleNameDto) {
-        this.id = ruleNameDto.getId();
         this.name = ruleNameDto.getName();
         this.description = ruleNameDto.getDescription();
         this.json = ruleNameDto.getJson();

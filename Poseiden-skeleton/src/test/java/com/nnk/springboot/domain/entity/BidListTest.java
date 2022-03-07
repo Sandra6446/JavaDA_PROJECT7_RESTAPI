@@ -15,16 +15,16 @@ public class BidListTest {
 
     @Test
     public void updateFromDto() {
-        BidListDto bidListDto = new BidListDto(1,"Account new name","New type", 10.0);
-        BidList bidList = new BidList(1,"Account name","Type",5);
-        BidList updatedBidList = new BidList(1,"Account new name","New type", 10.0);
+        BidListDto bidListDto = new BidListDto(1,"Account new name","New type", 10d);
+        BidList bidList = new BidList(1,"Account name","Type",5d);
+        BidList updatedBidList = new BidList(1,"Account new name","New type", 10d);
 
         bidList.updateFromDto(bidListDto);
         Assert.assertEquals(updatedBidList,bidList);
 
         // BidListDto with bad id
         bidListDto.setBidListId(2);
-        bidListDto.setBidQuantity(5.0);
+        bidListDto.setBidQuantity(5d);
         bidList.updateFromDto(bidListDto);
         Assert.assertEquals(updatedBidList,bidList);
     }

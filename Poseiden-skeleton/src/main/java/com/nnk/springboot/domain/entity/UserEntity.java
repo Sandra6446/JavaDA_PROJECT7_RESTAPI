@@ -1,7 +1,6 @@
 package com.nnk.springboot.domain.entity;
 
 import com.nnk.springboot.domain.dto.UserDto;
-import com.nnk.springboot.security.JwtUserDetailsService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,11 +22,16 @@ public class UserEntity {
     private String fullname;
     private String role;
 
+    public UserEntity(String username, String password, String fullname, String role) {
+        this.username = username;
+        this.password = password;
+        this.fullname = fullname;
+        this.role = role;
+    }
+
     public UserEntity(UserDto userDto) {
         this.username = userDto.getUsername();
         this.fullname = userDto.getFullname();
-        JwtUserDetailsService jwtUserDetailsService = new JwtUserDetailsService();
-        this.password = jwtUserDetailsService.encode(userDto.getPassword());
         this.role = userDto.getRole();
     }
 
@@ -35,8 +39,6 @@ public class UserEntity {
         if (userDto.getId().equals(this.id)) {
             this.setUsername(userDto.getUsername());
             this.setFullname(userDto.getFullname());
-            JwtUserDetailsService jwtUserDetailsService = new JwtUserDetailsService();
-            this.setPassword(jwtUserDetailsService.encode(userDto.getPassword()));
             this.setRole(userDto.getRole());
         }
     }

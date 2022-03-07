@@ -18,10 +18,8 @@ public class CurvePointDto {
     @NotNull(message = "Must not be null")
     @Positive(message = "Curve Id must be positive")
     private Integer curveId;
-    @NotNull(message = "Term is mandatory")
     @PositiveOrZero(message = "Term must be greater than or equal to zero")
     private Double term;
-    @NotNull(message = "Value is mandatory")
     @PositiveOrZero(message = "Value must be greater than or equal to zero")
     private Double value;
 

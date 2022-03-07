@@ -30,7 +30,6 @@ public class Rating {
     }
 
     public Rating(RatingDto ratingDto) {
-        this.id = ratingDto.getId();
         this.moodysRating = ratingDto.getMoodysRating();
         this.sandPRating = ratingDto.getSandPRating();
         this.fitchRating = ratingDto.getFitchRating();

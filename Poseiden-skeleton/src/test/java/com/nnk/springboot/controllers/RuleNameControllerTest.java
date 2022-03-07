@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,12 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RuleNameController.class)
-@AutoConfigureMockMvc(secure = false)
 @ActiveProfiles("test")
+@WithMockUser
 public class RuleNameControllerTest {
 
     @Autowired
@@ -82,7 +84,8 @@ public class RuleNameControllerTest {
                         .param("json", ruleNameDto.getJson())
                         .param("template", ruleNameDto.getTemplate())
                         .param("sqlStr", ruleNameDto.getSqlStr())
-                        .param("sqlPart", ruleNameDto.getSqlPart()))
+                        .param("sqlPart", ruleNameDto.getSqlPart())
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/ruleName/list"));
 
@@ -92,7 +95,8 @@ public class RuleNameControllerTest {
                         .param("json", ruleNameDto.getJson())
                         .param("template", ruleNameDto.getTemplate())
                         .param("sqlStr", ruleNameDto.getSqlStr())
-                        .param("sqlPart", ruleNameDto.getSqlPart()))
+                        .param("sqlPart", ruleNameDto.getSqlPart())
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("ruleName/add"));
     }
@@ -116,7 +120,8 @@ public class RuleNameControllerTest {
                         .param("json", ruleNameDto.getJson())
                         .param("template", ruleNameDto.getTemplate())
                         .param("sqlStr", ruleNameDto.getSqlStr())
-                        .param("sqlPart", ruleNameDto.getSqlPart()))
+                        .param("sqlPart", ruleNameDto.getSqlPart())
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/ruleName/list"));
 
@@ -126,7 +131,8 @@ public class RuleNameControllerTest {
                         .param("json", ruleNameDto.getJson())
                         .param("template", ruleNameDto.getTemplate())
                         .param("sqlStr", ruleNameDto.getSqlStr())
-                        .param("sqlPart", ruleNameDto.getSqlPart()))
+                        .param("sqlPart", ruleNameDto.getSqlPart())
+                        .with(csrf()))
                 .andExpect(model().hasErrors())
                 .andExpect(view().name("ruleName/update"));
     }

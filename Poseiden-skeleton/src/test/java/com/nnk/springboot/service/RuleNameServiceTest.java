@@ -32,20 +32,23 @@ public class RuleNameServiceTest {
     private RuleNameRepository ruleNameRepository;
 
     private List<RuleName> ruleNames;
+    private RuleName ruleName;
     private List<RuleNameDto> ruleNamesDto;
+    private RuleNameDto ruleNameDto;
 
     @Before
     public void setUp() throws Exception {
-        RuleName ruleName1 = new RuleName(1, "Name1", "Description1", "Json", "Template", "SqlStr", "SqlPart");
+        ruleName = new RuleName(1, "Name1", "Description1", "Json", "Template", "SqlStr", "SqlPart");
         RuleName ruleName2 = new RuleName(2, "Name2", "Description2", "Json", "Template", "SqlStr", "SqlPart");
         RuleName ruleName3 = new RuleName(3, "Name3", "Description3", "Json", "Template", "SqlStr", "SqlPart");
-        ruleNames = Arrays.asList(ruleName1, ruleName2, ruleName3);
-        ruleNameService = new RuleNameService(ruleNameRepository);
+        ruleNames = Arrays.asList(ruleName, ruleName2, ruleName3);
 
-        RuleNameDto ruleNameDto1 = new RuleNameDto(1, "Name1", "Description1", "Json", "Template", "SqlStr", "SqlPart");
-        RuleNameDto ruleNameDto2 = new RuleNameDto(2, "Name2", "Description2", "Json", "Template", "SqlStr", "SqlPart");
-        RuleNameDto ruleNameDto3 = new RuleNameDto(3, "Name3", "Description3", "Json", "Template", "SqlStr", "SqlPart");
-        ruleNamesDto = Arrays.asList(ruleNameDto1, ruleNameDto2, ruleNameDto3);
+        ruleNameDto = new RuleNameDto(ruleName);
+        RuleNameDto ruleNameDto2 = new RuleNameDto(ruleName2);
+        RuleNameDto ruleNameDto3 = new RuleNameDto(ruleName3);
+        ruleNamesDto = Arrays.asList(ruleNameDto, ruleNameDto2, ruleNameDto3);
+
+        ruleNameService = new RuleNameService(ruleNameRepository);
     }
 
     @Test
@@ -62,8 +65,7 @@ public class RuleNameServiceTest {
 
     @Test
     public void getById() {
-        RuleNameDto ruleNameDto = new RuleNameDto(1, "Name1", "Description1", "Json", "Template", "SqlStr", "SqlPart");
-        Mockito.when(ruleNameRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(ruleNames.get(0)));
+        Mockito.when(ruleNameRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(ruleName));
         Assert.assertEquals(ruleNameDto, ruleNameService.getById(1));
     }
 
@@ -75,16 +77,13 @@ public class RuleNameServiceTest {
 
     @Test
     public void save() {
-        RuleNameDto ruleNameDto = ruleNamesDto.get(0);
-        RuleName ruleName = ruleNames.get(0);
+        RuleName ruleNameToSave = new RuleName("Name1", "Description1", "Json", "Template", "SqlStr", "SqlPart");
         ruleNameService.save(ruleNameDto);
-        verify(ruleNameRepository, times(1)).saveAndFlush(ruleName);
+        verify(ruleNameRepository, times(1)).saveAndFlush(ruleNameToSave);
     }
 
     @Test
     public void update() {
-        RuleNameDto ruleNameDto = ruleNamesDto.get(0);
-        RuleName ruleName = ruleNames.get(0);
         Mockito.when(ruleNameRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(ruleName));
         ruleNameService.update(ruleNameDto);
         verify(ruleNameRepository, times(1)).saveAndFlush(ruleName);
@@ -93,12 +92,12 @@ public class RuleNameServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void whenExceptionThrown_update() {
         Mockito.when(ruleNameRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
-        ruleNameService.update(ruleNamesDto.get(0));
+        ruleNameService.update(ruleNameDto);
     }
 
     @Test
     public void delete() {
-        Mockito.when(ruleNameRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(ruleNames.get(0)));
+        Mockito.when(ruleNameRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(ruleName));
         ruleNameService.delete(1);
         verify(ruleNameRepository, times(1)).deleteById(1);
     }
