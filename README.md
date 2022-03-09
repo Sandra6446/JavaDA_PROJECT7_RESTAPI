@@ -14,5 +14,6 @@ Sur la branche develop
 Le dossier contient :
   * Le rapport Jacoco
   * La documentation Javadoc
-  * Le projet Poseidon
-  * Le README avec tous les prérequis et la notice d'installation
+  * Le projet Poseidon (qui contient le README avec tous les prérequis et la notice d'installation)
+
+  
