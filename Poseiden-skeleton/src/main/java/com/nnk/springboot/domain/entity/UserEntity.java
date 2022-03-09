@@ -1,12 +1,14 @@
 package com.nnk.springboot.domain.entity;
 
 import com.nnk.springboot.domain.dto.UserDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
+/**
+ * Represents a user (mapping class)
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,22 +24,28 @@ public class UserEntity {
     private String fullname;
     private String role;
 
-    public UserEntity(String username, String password, String fullname, String role) {
-        this.username = username;
-        this.password = password;
-        this.fullname = fullname;
-        this.role = role;
-    }
-
+    /**
+     * Build a UserEntity with UserDto values
+     *
+     * @param userDto : The UserDto with values to be copied
+     */
     public UserEntity(UserDto userDto) {
-        this.username = userDto.getUsername();
+        this.id = userDto.getId();
+        this.username = userDto.getUsername().replaceAll("\\s", "");
+        // Password managed by UserService
         this.fullname = userDto.getFullname();
         this.role = userDto.getRole();
     }
 
+    /**
+     * Updates a UserEntity with UserDto values (except password)
+     *
+     * @param userDto : The UserDto with values to be updated
+     */
     public void updateFromDto(UserDto userDto) {
-        if (userDto.getId().equals(this.id)) {
-            this.setUsername(userDto.getUsername());
+        if (Objects.equals(userDto.getId(), this.getId())) {
+            this.setUsername(userDto.getUsername().replaceAll("\\s", ""));
+            // Password managed by UserService
             this.setFullname(userDto.getFullname());
             this.setRole(userDto.getRole());
         }

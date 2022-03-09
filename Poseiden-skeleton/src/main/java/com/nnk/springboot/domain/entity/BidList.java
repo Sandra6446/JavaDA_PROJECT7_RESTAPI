@@ -1,19 +1,20 @@
 package com.nnk.springboot.domain.entity;
 
 import com.nnk.springboot.domain.dto.BidListDto;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
+/**
+ * Represents a bidList (mapping class)
+ */
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "bidlist")
 public class BidList {
-
-    // TODO : Controler creationName et revisionName cf securite
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +54,13 @@ public class BidList {
         this.bidQuantity = bidQuantity;
     }
 
+    /**
+     * Build a BidList with BidListDto values
+     *
+     * @param bidListDto : The BidListDto with values to be copied
+     */
     public BidList(BidListDto bidListDto) {
+        this.BidListId = bidListDto.getBidListId();
         this.account = bidListDto.getAccount();
         this.type = bidListDto.getType();
         if (bidListDto.getBidQuantity() == null) {
@@ -63,8 +70,13 @@ public class BidList {
         }
     }
 
+    /**
+     * Updates a BidList with BidListDto values
+     *
+     * @param bidListDto : The BidListDto with values to be updated
+     */
     public void updateFromDto(BidListDto bidListDto) {
-        if (bidListDto.getBidListId().equals(this.BidListId)) {
+        if (Objects.equals(bidListDto.getBidListId(), this.getBidListId())) {
             this.setAccount(bidListDto.getAccount());
             this.setType(bidListDto.getType());
             if (bidListDto.getBidQuantity() == null) {

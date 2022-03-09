@@ -42,17 +42,17 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        userEntity = new UserEntity(1, "username","P@ssw0rd","fullname","USER");
-        UserEntity userEntity2 = new UserEntity(2, "username2","password2","fullname2","ADMIN");
-        UserEntity userEntity3 = new UserEntity(3, "username3","password3","fullname3","USER");
+        userEntity = new UserEntity(1, "username", "P@ssw0rd", "fullname", "USER");
+        UserEntity userEntity2 = new UserEntity(2, "username2", "password2", "fullname2", "ADMIN");
+        UserEntity userEntity3 = new UserEntity(3, "username3", "password3", "fullname3", "USER");
         userEntities = Arrays.asList(userEntity, userEntity2, userEntity3);
 
-        userDto = new UserDto(userEntity);
-        UserDto userDto2 = new UserDto(userEntity2);
-        UserDto userDto3 = new UserDto(userEntity3);
+        userDto = new UserDto(1, "username", null, "fullname", "USER");
+        UserDto userDto2 = new UserDto(2, "username2", null, "fullname2", "ADMIN");
+        UserDto userDto3 = new UserDto(3, "username3", null, "fullname3", "USER");
         userDtos = Arrays.asList(userDto, userDto2, userDto3);
 
-        userService = new UserService(userRepository,userDetailsService);
+        userService = new UserService(userRepository, userDetailsService);
     }
 
     @Test
@@ -81,17 +81,40 @@ public class UserServiceTest {
 
     @Test
     public void save() {
-        Mockito.when(userDetailsService.encode(ArgumentMatchers.anyString())).thenReturn("$2a$10$n.mMy8BUJ2D87A.1bRpKzOCCTBvbv2XTKtlT6RD/q6Uas/gpZYbkG");
-        UserEntity userEntityToSave = new UserEntity( "username","$2a$10$n.mMy8BUJ2D87A.1bRpKzOCCTBvbv2XTKtlT6RD/q6Uas/gpZYbkG","fullname","USER");
+        Mockito.when(userDetailsService.encode(ArgumentMatchers.anyString())).thenReturn("password encoded");
+        // La base est vide pour le test donc id=1
+        UserEntity userEntityToSave = new UserEntity(1, "username", "password encoded", "fullname", "USER");
+        userDto.setPassword("password");
         userService.save(userDto);
-        verify(userRepository,times(1)).saveAndFlush(userEntityToSave);
+        verify(userRepository, times(1)).saveAndFlush(userEntityToSave);
     }
 
     @Test
     public void update() {
+        Mockito.when(userDetailsService.encode(ArgumentMatchers.anyString())).thenReturn("password encoded");
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(userEntity));
+        UserDto userDtoWithNewValues = new UserDto(1, "username", "P@ssw0rd", "new fullname", "USER");
+        userService.update(userDtoWithNewValues);
+        UserEntity userEntityToUpdate = new UserEntity(1, "username", "password encoded", "new fullname", "USER");
+        verify(userRepository, times(1)).saveAndFlush(userEntityToUpdate);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenExceptionThrown_update() {
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        userService.update(userDto);
     }
 
     @Test
     public void delete() {
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(userEntity));
+        userService.delete(1);
+        verify(userRepository, times(1)).deleteById(1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenExceptionThrown_delete() {
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        userService.delete(1);
     }
 }

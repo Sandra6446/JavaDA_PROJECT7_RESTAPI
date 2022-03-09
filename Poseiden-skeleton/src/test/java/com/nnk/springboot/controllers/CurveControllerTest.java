@@ -40,7 +40,7 @@ public class CurveControllerTest {
 
     @Before
     public void setUp() {
-        curvePointDto = new CurvePointDto(4, 5, 10d, 5d);
+        curvePointDto = new CurvePointDto(1, 5, 10d, 5d);
 
         CurvePointDto curvePointDto2 = new CurvePointDto(2, 10, 10d, 5d);
         CurvePointDto curvePointDto3 = new CurvePointDto(3, 3, 10d, 10d);
@@ -133,7 +133,7 @@ public class CurveControllerTest {
     public void deleteBid() throws Exception {
         Mockito.doNothing().when(Mockito.spy(curvePointService)).delete(ArgumentMatchers.anyInt());
         Mockito.when(curvePointService.getAll()).thenReturn(curvePointDtos);
-        mockMvc.perform(MockMvcRequestBuilders.get("/curvePoint/delete/{id}",1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/curvePoint/delete/{id}", 1))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/curvePoint/list"));
     }

@@ -38,6 +38,7 @@ public class BidListController {
     /**
      * Renders the view "bidList/add" with a form to add a bidList
      *
+     * @param model : The model map with data (attributes) to be transmitted to the view
      * @return The string "bidList/add" to render the associated view
      */
     @GetMapping("/bidList/add")
@@ -49,9 +50,9 @@ public class BidListController {
     /**
      * Redirects to the view "bidList/list" with the list of all bidList if the bidList saving succeed
      *
-     * @param bidListDto : The bidList to create
-     * @param result : The binding results
-     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @param bidListDto : The bidListDto to create
+     * @param result     : The binding results
+     * @param model      : The model map with data (attributes) to be transmitted to the view
      * @return The string "redirect:/bidList/list" to redirect to the associated view if the operation succeeds, otherwise the string "bidList/add" to display the reason of the failure on the associated view
      */
     @PostMapping("/bidList/validate")
@@ -62,14 +63,14 @@ public class BidListController {
         }
         bidListService.save(bidListDto);
         model.addAttribute("bidListDto", bidListService.getAll());
-        logger.info(String.format("Bid %s saved in database", bidListDto.getBidListId()));
+        logger.info("Bid saved in database");
         return "redirect:/bidList/list";
     }
 
     /**
      * Renders the view "bidList/update" with a prefilled form to update a bidList
      *
-     * @param id : The id of the bidList to be updated
+     * @param id    : The id of the bidList to be updated
      * @param model : The model map with data (attributes) to be transmitted to the view
      * @return The string "bidList/update" to render the associated view
      */
@@ -82,10 +83,10 @@ public class BidListController {
     /**
      * Redirects to the view "bidList/list" with the list of all bidList if the bidList updating succeed
      *
-     * @param id : The id of the bidList to be updated
-     * @param bidListDto : The bidList with new values
-     * @param result : The binding results
-     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @param id         : The id of the bidList to be updated
+     * @param bidListDto : The bidListDto with new values
+     * @param result     : The binding results
+     * @param model      : The model map with data (attributes) to be transmitted to the view
      * @return The string "redirect:/bidList/list" to redirect to the associated view if the operation succeeds, otherwise the string "bidList/update" to display the reason of the failure on the associated view
      */
     @PostMapping("/bidList/update/{id}")
@@ -105,7 +106,7 @@ public class BidListController {
     /**
      * Redirects to the view "bidList/list" with the list of all bidList if the bidList updating succeed
      *
-     * @param id : The id of the bidList to be deleted
+     * @param id    : The id of the bidList to be deleted
      * @param model : The model map with data (attributes) to be transmitted to the view
      * @return The string "redirect:/bidList/list" to redirect to the associated view if the operation succeeds, otherwise the reason of the failure
      */

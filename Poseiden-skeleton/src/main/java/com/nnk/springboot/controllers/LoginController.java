@@ -42,11 +42,7 @@ public class LoginController {
     /**
      * Renders the view "403" for unauthorized users
      *
-<<<<<<< Updated upstream
      * @return The ModelAndView "403"
-=======
-     * @return The ModelAndView "403q"
->>>>>>> Stashed changes
      */
     @GetMapping("error")
     public ModelAndView error() {

@@ -1,6 +1,5 @@
 package com.nnk.springboot.service;
 
-import com.nnk.springboot.controllers.UserController;
 import com.nnk.springboot.domain.dto.UserDto;
 import com.nnk.springboot.domain.entity.UserEntity;
 import com.nnk.springboot.repositories.UserRepository;
@@ -16,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Manages the UserEntity data
+ */
 @Service
 @Transactional
 @AllArgsConstructor
@@ -29,6 +31,11 @@ public class UserService implements CrudService<UserDto> {
     @Autowired
     UserDetailsServiceImpl userDetailsService;
 
+    /**
+     * Gets all UserEntities in database
+     *
+     * @return A list of corresponding UserDto
+     */
     @Override
     public List<UserDto> getAll() {
         List<UserEntity> userEntities = userRepository.findAll();
@@ -39,12 +46,23 @@ public class UserService implements CrudService<UserDto> {
         return userDtos;
     }
 
+    /**
+     * Gets a specific UserEntity in database
+     *
+     * @param id : The id to be found
+     * @return The corresponding UserDto
+     */
     @Override
     public UserDto getById(Integer id) {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         return new UserDto(userEntity);
     }
 
+    /**
+     * Saves a UserEntity in database
+     *
+     * @param userDto : The UserDto with values to be saved
+     */
     @Override
     public void save(UserDto userDto) {
         Optional<UserEntity> userEntityOptional = userRepository.findByUsername(userDto.getUsername());
@@ -58,6 +76,11 @@ public class UserService implements CrudService<UserDto> {
         }
     }
 
+    /**
+     * Updates a UserEntity in database
+     *
+     * @param userDto : The UserDto with new values
+     */
     @Override
     public void update(UserDto userDto) {
         UserEntity userEntity = userRepository.findById(userDto.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid user with id :" + userDto.getId()));
@@ -66,6 +89,11 @@ public class UserService implements CrudService<UserDto> {
         userRepository.saveAndFlush(userEntity);
     }
 
+    /**
+     * Deletes a UserEntity in database
+     *
+     * @param id : The id of the UserEntity to be deleted
+     */
     @Override
     public void delete(Integer id) {
         userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user with id :" + id));

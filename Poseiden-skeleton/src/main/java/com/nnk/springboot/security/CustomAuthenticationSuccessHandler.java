@@ -17,6 +17,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * Renders a specific view according to user authorities
+ */
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     private Logger logger = LogManager.getLogger(CustomAuthenticationSuccessHandler.class);

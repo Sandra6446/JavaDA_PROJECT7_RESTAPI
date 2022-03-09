@@ -23,17 +23,38 @@ public class TradeController {
     @Autowired
     TradeService tradeService;
 
+    /**
+     * Renders the view "trade/list" with the list of all trades
+     *
+     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @return The string "trade/list" to render the associated view
+     */
     @RequestMapping("/trade/list")
     public String home(Model model) {
         model.addAttribute("trades", tradeService.getAll());
         return "trade/list";
     }
 
+    /**
+     * Renders the view "trade/add" with a form to add a trade
+     *
+     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @return The string "trade/add" to render the associated view
+     */
     @GetMapping("/trade/add")
-    public String addUser(TradeDto tradeDto) {
+    public String addUser(Model model) {
+        model.addAttribute(new TradeDto());
         return "trade/add";
     }
 
+    /**
+     * Redirects to the view "trade/list" with the list of all trades if the trade saving succeed
+     *
+     * @param tradeDto : The tradeDto to create
+     * @param result   : The binding results
+     * @param model    : The model map with data (attributes) to be transmitted to the view
+     * @return The string "redirect:/trade/list" to redirect to the associated view if the operation succeeds, otherwise the string "trade/add" to display the reason of the failure on the associated view
+     */
     @PostMapping("/trade/validate")
     public String validate(@Valid TradeDto tradeDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -42,16 +63,32 @@ public class TradeController {
         }
         tradeService.save(tradeDto);
         model.addAttribute("tradeDto", tradeService.getAll());
-        logger.info(String.format("Trade %s saved in database", tradeDto.getTradeId()));
+        logger.info("Trade saved in database");
         return "redirect:/trade/list";
     }
 
+    /**
+     * Renders the view "trade/update" with a prefilled form to update a trade
+     *
+     * @param id    : The id of the trade to be updated
+     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @return The string "trade/update" to render the associated view
+     */
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
         model.addAttribute("tradeDto", tradeService.getById(id));
         return "trade/update";
     }
 
+    /**
+     * Redirects to the view "trade/list" with the list of all trades if the trade updating succeed
+     *
+     * @param id       : The id of the trade to be updated
+     * @param tradeDto : The tradeDto with new values
+     * @param result   : The binding results
+     * @param model    : The model map with data (attributes) to be transmitted to the view
+     * @return The string "redirect:/trade/list" to redirect to the associated view if the operation succeeds, otherwise the string "trade/update" to display the reason of the failure on the associated view
+     */
     @PostMapping("/trade/update/{id}")
     public String updateTrade(@PathVariable("id") Integer id, @Valid TradeDto tradeDto,
                               BindingResult result, Model model) {
@@ -66,6 +103,13 @@ public class TradeController {
         return "redirect:/trade/list";
     }
 
+    /**
+     * Redirects to the view "trade/list" with the list of all trades if the trade updating succeed
+     *
+     * @param id    : The id of the trade to be deleted
+     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @return The string "redirect:/trade/list" to redirect to the associated view if the operation succeeds, otherwise the reason of the failure
+     */
     @GetMapping("/trade/delete/{id}")
     public String deleteTrade(@PathVariable("id") Integer id, Model model) {
         tradeService.delete(id);

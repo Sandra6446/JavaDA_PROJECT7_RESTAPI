@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -135,7 +134,7 @@ public class TradeControllerTest {
     public void deleteBid() throws Exception {
         Mockito.doNothing().when(Mockito.spy(tradeService)).delete(ArgumentMatchers.anyInt());
         Mockito.when(tradeService.getAll()).thenReturn(tradeDtos);
-        mockMvc.perform(MockMvcRequestBuilders.get("/trade/delete/{id}",1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/trade/delete/{id}", 1))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/trade/list"));
     }

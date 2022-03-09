@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+/**
+ * Security configuration
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -32,6 +35,7 @@ public class WebMVCSecurity extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder)
                 .and()
+                // Default User and Admin
                 .inMemoryAuthentication()
                 .withUser("springuser").password(passwordEncoder.encode("spring123")).roles("USER")
                 .and()
@@ -54,7 +58,7 @@ public class WebMVCSecurity extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .formLogin()
-                //Definition of the default Success URL (redirecting to RedirectController)
+                //In case of success the authenticationSuccessHandler redirects to a specific view
                 .successHandler(authenticationSuccessHandler()).permitAll().
                 and()
                 //Configuration of the logout
@@ -67,7 +71,7 @@ public class WebMVCSecurity extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
                 .permitAll()
                 .and()
-                //Definition of the default URL in case of exception of an access denied
+                //Definition of the default URL in case of a denied access
                 .exceptionHandling()
                 .accessDeniedPage("/app/error");
     }

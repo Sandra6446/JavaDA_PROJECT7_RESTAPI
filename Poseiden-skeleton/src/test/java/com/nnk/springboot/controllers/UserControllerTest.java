@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@WithMockUser(authorities={"ROLE_ADMIN"})
+@WithMockUser(authorities = {"ROLE_ADMIN"})
 public class UserControllerTest {
 
     @Autowired
@@ -43,10 +43,10 @@ public class UserControllerTest {
     @Before
     public void setUp() {
 
-        userDto = new UserDto(1, "username","P@ssw0rd","fullname","USER");
+        userDto = new UserDto(1, "username", "P@ssw0rd", "fullname", "USER");
 
-        UserDto userDto2 = new UserDto(2, "username2","password2","fullname2","ADMIN");
-        UserDto userDto3 = new UserDto(3, "username3","password3","fullname3","USER");
+        UserDto userDto2 = new UserDto(2, "username2", "password2", "fullname2", "ADMIN");
+        UserDto userDto3 = new UserDto(3, "username3", "password3", "fullname3", "USER");
         userDtos = Arrays.asList(userDto, userDto2, userDto3);
     }
 
@@ -180,7 +180,7 @@ public class UserControllerTest {
     public void deleteUser() throws Exception {
         Mockito.doNothing().when(Mockito.spy(userService)).delete(ArgumentMatchers.anyInt());
         Mockito.when(userService.getAll()).thenReturn(userDtos);
-        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete/{id}",1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/delete/{id}", 1))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/user/list"));
     }

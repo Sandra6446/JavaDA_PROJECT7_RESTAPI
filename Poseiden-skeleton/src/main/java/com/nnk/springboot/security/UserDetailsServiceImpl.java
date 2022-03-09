@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Optional;
 
+/**
+ * Authentication service
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Service
@@ -29,6 +32,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
+    /**
+     * Gets a user by username
+     *
+     * @param username : The username to be found in database
+     * @return A User if the operation succeed, otherwise an exception with the reason of the failure
+     *
+     * @see User
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserEntity> userEntityOptional = userRepository.findByUsername(username);
@@ -40,6 +51,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 Collections.singleton(new SimpleGrantedAuthority(authority)));
     }
 
+    /**
+     * Encodes the user password
+     *
+     * @param password : The password to be encoded
+     * @return The encoded password
+     */
     public String encode(String password) {
         return bcryptEncoder.encode(password);
     }

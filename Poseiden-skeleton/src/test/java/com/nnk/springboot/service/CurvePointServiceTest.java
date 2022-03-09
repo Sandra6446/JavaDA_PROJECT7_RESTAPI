@@ -38,9 +38,9 @@ public class CurvePointServiceTest {
 
     @Before
     public void setUp() {
-        curvePoint = new CurvePoint(1, 5,10d,20d);
-        CurvePoint curvePoint2 = new CurvePoint(2, 6, 10d,10d);
-        CurvePoint curvePoint3 = new CurvePoint(3, 10,10.5,0.0);
+        curvePoint = new CurvePoint(1, 5, 10d, 20d);
+        CurvePoint curvePoint2 = new CurvePoint(2, 6, 10d, 10d);
+        CurvePoint curvePoint3 = new CurvePoint(3, 10, 10.5, 0.0);
         curvePoints = Arrays.asList(curvePoint, curvePoint2, curvePoint3);
 
         curvePointDto = new CurvePointDto(curvePoint);
@@ -77,16 +77,19 @@ public class CurvePointServiceTest {
 
     @Test
     public void save() {
-        CurvePoint curvePointToSave = new CurvePoint(5,10d,20d);
+        // La base est vide pour le test donc id=1
+        CurvePoint curvePointToSave = new CurvePoint(1, 5, 10d, 20d);
         curvePointService.save(curvePointDto);
-        verify(curvePointRepository,times(1)).saveAndFlush(curvePointToSave);
+        verify(curvePointRepository, times(1)).saveAndFlush(curvePointToSave);
     }
 
     @Test
     public void update() {
         Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoint));
-        curvePointService.update(curvePointDto);
-        verify(curvePointRepository,times(1)).saveAndFlush(curvePoint);
+        CurvePointDto curvePointDtoWithNewValues = new CurvePointDto(1, 5, 10d, 100d);
+        curvePointService.update(curvePointDtoWithNewValues);
+        CurvePoint curvePointToUpdate = new CurvePoint(1, 5, 10d, 100d);
+        verify(curvePointRepository, times(1)).saveAndFlush(curvePointToUpdate);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -99,7 +102,7 @@ public class CurvePointServiceTest {
     public void delete() {
         Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoint));
         curvePointService.delete(1);
-        verify(curvePointRepository,times(1)).deleteById(1);
+        verify(curvePointRepository, times(1)).deleteById(1);
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -77,7 +77,8 @@ public class RatingServiceTest {
 
     @Test
     public void save() {
-        Rating ratingToSave = new Rating("MR1", "SPR1", "FR1", 1);
+        // La base est vide pour le test donc id=1
+        Rating ratingToSave = new Rating(1, "MR1", "SPR1", "FR1", 1);
         ratingService.save(ratingDto);
         verify(ratingRepository, times(1)).saveAndFlush(ratingToSave);
     }
@@ -85,8 +86,10 @@ public class RatingServiceTest {
     @Test
     public void update() {
         Mockito.when(ratingRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(rating));
-        ratingService.update(ratingDto);
-        verify(ratingRepository, times(1)).saveAndFlush(rating);
+        RatingDto ratingDtoWithNewValues = new RatingDto(1, "MR1", "SPR1", "FR1", 10);
+        ratingService.update(ratingDtoWithNewValues);
+        Rating ratingToUpdate = new Rating(1, "MR1", "SPR1", "FR1", 10);
+        verify(ratingRepository, times(1)).saveAndFlush(ratingToUpdate);
     }
 
     @Test(expected = IllegalArgumentException.class)

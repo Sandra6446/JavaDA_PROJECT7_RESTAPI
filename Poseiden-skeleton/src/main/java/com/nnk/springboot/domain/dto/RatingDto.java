@@ -9,22 +9,34 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+/**
+ * Represents a rating
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RatingDto {
 
     private Integer id;
+
     @NotBlank(message = "Moody's rating is mandatory")
     private String moodysRating;
+
     @NotBlank(message = "S&P rating is mandatory")
     private String sandPRating;
+
     @NotBlank(message = "Fitch rating is mandatory")
     private String fitchRating;
+
     @NotNull(message = "Order number is mandatory")
     @Positive(message = "Order number must be positive")
     private Integer orderNumber;
 
+    /**
+     * Build a RatingDto with Rating values
+     *
+     * @param rating : The Rating with values to be copied
+     */
     public RatingDto(Rating rating) {
         this.id = rating.getId();
         this.moodysRating = rating.getMoodysRating();

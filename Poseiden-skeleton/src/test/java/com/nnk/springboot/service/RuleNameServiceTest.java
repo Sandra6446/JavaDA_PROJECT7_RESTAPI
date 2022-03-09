@@ -77,7 +77,8 @@ public class RuleNameServiceTest {
 
     @Test
     public void save() {
-        RuleName ruleNameToSave = new RuleName("Name1", "Description1", "Json", "Template", "SqlStr", "SqlPart");
+        // La base est vide pour le test donc id=1
+        RuleName ruleNameToSave = new RuleName(1, "Name1", "Description1", "Json", "Template", "SqlStr", "SqlPart");
         ruleNameService.save(ruleNameDto);
         verify(ruleNameRepository, times(1)).saveAndFlush(ruleNameToSave);
     }
@@ -85,8 +86,10 @@ public class RuleNameServiceTest {
     @Test
     public void update() {
         Mockito.when(ruleNameRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(ruleName));
-        ruleNameService.update(ruleNameDto);
-        verify(ruleNameRepository, times(1)).saveAndFlush(ruleName);
+        RuleNameDto ruleNameDtoWithNewValues = new RuleNameDto(1, "New name", "Description1", "Json", "Template", "SqlStr", "SqlPart");
+        ruleNameService.update(ruleNameDtoWithNewValues);
+        RuleName ruleNameToUpdate = new RuleName(1, "New name", "Description1", "Json", "Template", "SqlStr", "SqlPart");
+        verify(ruleNameRepository, times(1)).saveAndFlush(ruleNameToUpdate);
     }
 
     @Test(expected = IllegalArgumentException.class)

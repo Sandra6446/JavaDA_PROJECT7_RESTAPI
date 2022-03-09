@@ -1,12 +1,15 @@
 package com.nnk.springboot.domain.entity;
 
 import com.nnk.springboot.domain.dto.TradeDto;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
+/**
+ * Represents a trade (mapping class)
+ */
 @Data
 @NoArgsConstructor
 @Entity
@@ -50,7 +53,13 @@ public class Trade {
         this.buyQuantity = buyQuantity;
     }
 
+    /**
+     * Build a Trade with TradeDto values
+     *
+     * @param tradeDto : The TradeDto with values to be copied
+     */
     public Trade(TradeDto tradeDto) {
+        this.TradeId = tradeDto.getTradeId();
         this.account = tradeDto.getAccount();
         this.type = tradeDto.getType();
         if (tradeDto.getBuyQuantity() == null) {
@@ -60,8 +69,13 @@ public class Trade {
         }
     }
 
+    /**
+     * Updates a Trade with TradeDto values
+     *
+     * @param tradeDto : The TradeDto with values to be updated
+     */
     public void updateFromDto(TradeDto tradeDto) {
-        if (tradeDto.getTradeId().equals(this.TradeId)) {
+        if (Objects.equals(tradeDto.getTradeId(), this.getTradeId())) {
             this.setAccount(tradeDto.getAccount());
             this.setType(tradeDto.getType());
             if (tradeDto.getBuyQuantity() == null) {

@@ -38,9 +38,9 @@ public class BidListServiceTest {
 
     @Before
     public void setUp() {
-        bidList = new BidList(1,"First bidList", "Type 1", 20d);
-        BidList bidList2 = new BidList(2,"Second bidList", "Type 2", 10d);
-        BidList bidList3 = new BidList(3,"Third bidList", "Type 3", 5d);
+        bidList = new BidList(1, "First bidList", "Type 1", 20d);
+        BidList bidList2 = new BidList(2, "Second bidList", "Type 2", 10d);
+        BidList bidList3 = new BidList(3, "Third bidList", "Type 3", 5d);
         bidLists = Arrays.asList(bidList, bidList2, bidList3);
 
         bidListDto = new BidListDto(bidList);
@@ -77,16 +77,19 @@ public class BidListServiceTest {
 
     @Test
     public void save() {
-        BidList bidListToSave = new BidList("First bidList", "Type 1", 20d);
+        // La base est vide pour le test donc id=1
+        BidList bidListToSave = new BidList(1, "First bidList", "Type 1", 20d);
         bidListService.save(bidListDto);
-        verify(bidListRepository,times(1)).saveAndFlush(bidListToSave);
+        verify(bidListRepository, times(1)).saveAndFlush(bidListToSave);
     }
 
     @Test
     public void update() {
         Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidList));
-        bidListService.update(bidListDto);
-        verify(bidListRepository,times(1)).saveAndFlush(bidList);
+        BidListDto bidListDtoWithNewValues = new BidListDto(1, "New bidList", "Type 1", 20d);
+        bidListService.update(bidListDtoWithNewValues);
+        BidList bidListToUpdate = new BidList(1, "New bidList", "Type 1", 20d);
+        verify(bidListRepository, times(1)).saveAndFlush(bidListToUpdate);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -99,7 +102,7 @@ public class BidListServiceTest {
     public void delete() {
         Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidList));
         bidListService.delete(1);
-        verify(bidListRepository,times(1)).deleteById(1);
+        verify(bidListRepository, times(1)).deleteById(1);
     }
 
     @Test(expected = IllegalArgumentException.class)

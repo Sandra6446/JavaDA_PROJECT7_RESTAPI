@@ -24,7 +24,7 @@ public class CurveController {
     CurvePointService curvePointService;
 
     /**
-     * Renders the view "curvePoint/list" with the list of all curvePoint
+     * Renders the view "curvePoint/list" with the list of all curvePoints
      *
      * @param model : The model map with data (attributes) to be transmitted to the view
      * @return The string "curvePoint/list" to render the associated view
@@ -38,21 +38,22 @@ public class CurveController {
     /**
      * Renders the view "curvePoint/add" with a form to add a curvePoint
      *
+     * @param model : The model map with data (attributes) to be transmitted to the view
      * @return The string "curvePoint/add" to render the associated view
      */
     @GetMapping("/curvePoint/add")
-    public String addBidForm(Model model) {
+    public String addCurvePointForm(Model model) {
         model.addAttribute(new CurvePointDto());
         return "curvePoint/add";
     }
 
     /**
-     * Redirects to the view "curvePoint/list" with the list of all curvePoint if the curvePoint saving succeed
+     * Redirects to the view "curvePoint/list" with the list of all curvePoints if the curvePoint saving succeed
      *
      * @param curvePointDto : The curvePointDto to create
-     * @param result : The binding results
-     * @param model : The model map with data (attributes) to be transmitted to the view
-     * @return The string "redirect:/curvePointDto/list" to redirect to the associated view if the operation succeeds, otherwise the string "curvePointDto/add" to display the reason of the failure on the associated view
+     * @param result        : The binding results
+     * @param model         : The model map with data (attributes) to be transmitted to the view
+     * @return The string "redirect:/curvePoint/list" to redirect to the associated view if the operation succeeds, otherwise the string "curvePoint/add" to display the reason of the failure on the associated view
      */
     @PostMapping("/curvePoint/validate")
     public String validate(@Valid CurvePointDto curvePointDto, BindingResult result, Model model) {
@@ -62,14 +63,14 @@ public class CurveController {
         }
         curvePointService.save(curvePointDto);
         model.addAttribute("curvePointDto", curvePointService.getAll());
-        logger.info(String.format("Curve %s saved in database", curvePointDto.getId()));
+        logger.info("Curve saved in database");
         return "redirect:/curvePoint/list";
     }
 
     /**
      * Renders the view "curvePoint/update" with a prefilled form to update a curvePoint
      *
-     * @param id : The id of the curvePoint to be updated
+     * @param id    : The id of the curvePoint to be updated
      * @param model : The model map with data (attributes) to be transmitted to the view
      * @return The string "curvePoint/update" to render the associated view
      */
@@ -80,17 +81,17 @@ public class CurveController {
     }
 
     /**
-     * Redirects to the view "curvePoint/list" with the list of all curvePoint if the curvePoint updating succeed
+     * Redirects to the view "curvePoint/list" with the list of all curvePoints if the curvePoint updating succeed
      *
-     * @param id : The id of the curvePoint to be updated
-     * @param curvePointDto : The curvePoint with new values
-     * @param result : The binding results
-     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @param id            : The id of the curvePoint to be updated
+     * @param curvePointDto : The curvePointDto with new values
+     * @param result        : The binding results
+     * @param model         : The model map with data (attributes) to be transmitted to the view
      * @return The string "redirect:/curvePoint/list" to redirect to the associated view if the operation succeeds, otherwise the string "curvePoint/update" to display the reason of the failure on the associated view
      */
     @PostMapping("/curvePoint/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid CurvePointDto curvePointDto,
-                            BindingResult result, Model model) {
+    public String updateCurvePoint(@PathVariable("id") Integer id, @Valid CurvePointDto curvePointDto,
+                                   BindingResult result, Model model) {
         curvePointDto.setId(id);
         if (result.hasErrors()) {
             logger.error(result.getAllErrors());
@@ -103,14 +104,14 @@ public class CurveController {
     }
 
     /**
-     * Redirects to the view "curvePoint/list" with the list of all curvePoint if the curvePoint updating succeed
+     * Redirects to the view "curvePoint/list" with the list of all curvePoints if the curvePoint updating succeed
      *
-     * @param id : The id of the curvePoint to be deleted
+     * @param id    : The id of the curvePoint to be deleted
      * @param model : The model map with data (attributes) to be transmitted to the view
      * @return The string "redirect:/curvePoint/list" to redirect to the associated view if the operation succeeds, otherwise the reason of the failure
      */
     @GetMapping("/curvePoint/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
+    public String deleteCurvePoint(@PathVariable("id") Integer id, Model model) {
         curvePointService.delete(id);
         model.addAttribute("curvePointDto", curvePointService.getAll());
         logger.info(String.format("Curve %s deleted", id));

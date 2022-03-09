@@ -77,16 +77,19 @@ public class TradeServiceTest {
 
     @Test
     public void save() {
-        Trade tradeToSave = new Trade("First trade", "Type 1", 20.0);
+        // La base est vide pour le test donc id=1
+        Trade tradeToSave = new Trade(1, "First trade", "Type 1", 20.0);
         tradeService.save(tradeDto);
-        verify(tradeRepository,times(1)).saveAndFlush(tradeToSave);
+        verify(tradeRepository, times(1)).saveAndFlush(tradeToSave);
     }
 
     @Test
     public void update() {
         Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trade));
-        tradeService.update(tradeDto);
-        verify(tradeRepository,times(1)).saveAndFlush(trade);
+        TradeDto tradeDtoWithNewValues = new TradeDto(1, "New trade", "Type 1", 20.0);
+        tradeService.update(tradeDtoWithNewValues);
+        Trade tradeToUpdate = new Trade(1, "New trade", "Type 1", 20.0);
+        verify(tradeRepository, times(1)).saveAndFlush(tradeToUpdate);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -99,7 +102,7 @@ public class TradeServiceTest {
     public void delete() {
         Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trade));
         tradeService.delete(1);
-        verify(tradeRepository,times(1)).deleteById(1);
+        verify(tradeRepository, times(1)).deleteById(1);
     }
 
     @Test(expected = IllegalArgumentException.class)

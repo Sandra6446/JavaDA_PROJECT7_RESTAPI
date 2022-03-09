@@ -1,12 +1,14 @@
 package com.nnk.springboot.domain.entity;
 
 import com.nnk.springboot.domain.dto.RuleNameDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
+/**
+ * Represents a ruleName (mapping class)
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,7 +34,13 @@ public class RuleName {
         this.sqlPart = sqlPart;
     }
 
+    /**
+     * Build a RuleName with RuleNameDto values
+     *
+     * @param ruleNameDto : The RuleNameDto with values to be copied
+     */
     public RuleName(RuleNameDto ruleNameDto) {
+        this.id = ruleNameDto.getId();
         this.name = ruleNameDto.getName();
         this.description = ruleNameDto.getDescription();
         this.json = ruleNameDto.getJson();
@@ -41,8 +49,13 @@ public class RuleName {
         this.sqlPart = ruleNameDto.getSqlPart();
     }
 
+    /**
+     * Updates a RuleName with RuleNameDto values
+     *
+     * @param ruleNameDto : The RuleNameDto with values to be updated
+     */
     public void updateFromDto(RuleNameDto ruleNameDto) {
-        if (ruleNameDto.getId().equals(this.id)) {
+        if (Objects.equals(ruleNameDto.getId(), this.getId())) {
             this.name = ruleNameDto.getName();
             this.description = ruleNameDto.getDescription();
             this.json = ruleNameDto.getJson();

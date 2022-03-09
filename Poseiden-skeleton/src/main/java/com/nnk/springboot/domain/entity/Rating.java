@@ -1,12 +1,14 @@
 package com.nnk.springboot.domain.entity;
 
 import com.nnk.springboot.domain.dto.RatingDto;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.Objects;
 
+/**
+ * Represents a rating (mapping class)
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,15 +31,26 @@ public class Rating {
         this.orderNumber = orderNumber;
     }
 
+    /**
+     * Build a Rating with RatingDto values
+     *
+     * @param ratingDto : The RatingDto with values to be copied
+     */
     public Rating(RatingDto ratingDto) {
+        this.id = ratingDto.getId();
         this.moodysRating = ratingDto.getMoodysRating();
         this.sandPRating = ratingDto.getSandPRating();
         this.fitchRating = ratingDto.getFitchRating();
         this.orderNumber = ratingDto.getOrderNumber();
     }
 
+    /**
+     * Updates a Rating with RatingDto values
+     *
+     * @param ratingDto : The RatingDto with values to be updated
+     */
     public void updateFromDto(RatingDto ratingDto) {
-        if (ratingDto.getId().equals(this.id)) {
+        if (Objects.equals(ratingDto.getId(), this.getId())) {
             this.moodysRating = ratingDto.getMoodysRating();
             this.sandPRating = ratingDto.getSandPRating();
             this.fitchRating = ratingDto.getFitchRating();

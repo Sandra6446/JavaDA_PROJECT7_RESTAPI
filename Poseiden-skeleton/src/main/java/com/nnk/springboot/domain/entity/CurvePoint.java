@@ -1,12 +1,15 @@
 package com.nnk.springboot.domain.entity;
 
 import com.nnk.springboot.domain.dto.CurvePointDto;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
+/**
+ * Represents a curvePoint (mapping class)
+ */
 @Data
 @NoArgsConstructor
 @Entity
@@ -35,7 +38,13 @@ public class CurvePoint {
         this.value = value;
     }
 
+    /**
+     * Build a CurvePoint with CurvePointDto values
+     *
+     * @param curvePointDto : The CurvePointDto with values to be copied
+     */
     public CurvePoint(CurvePointDto curvePointDto) {
+        this.id = curvePointDto.getId();
         this.curveId = curvePointDto.getCurveId();
         if (curvePointDto.getTerm() == null) {
             this.setTerm(0d);
@@ -49,8 +58,13 @@ public class CurvePoint {
         }
     }
 
+    /**
+     * Updates a CurvePoint with CurvePointDto values
+     *
+     * @param curvePointDto : The CurvePointDto with values to be updated
+     */
     public void updateFromDto(CurvePointDto curvePointDto) {
-        if (curvePointDto.getId().equals(this.id)) {
+        if (Objects.equals(curvePointDto.getId(), this.getId())) {
             this.setCurveId(curvePointDto.getCurveId());
             if (curvePointDto.getTerm() == null) {
                 this.setTerm(0d);
