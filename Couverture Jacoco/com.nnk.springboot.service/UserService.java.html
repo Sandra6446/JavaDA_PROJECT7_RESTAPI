@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.service</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.service;
+
+import com.nnk.springboot.domain.dto.UserDto;
+import com.nnk.springboot.domain.entity.UserEntity;
+import com.nnk.springboot.repositories.UserRepository;
+import com.nnk.springboot.config.security.UserDetailsServiceImpl;
+import lombok.AllArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * Manages the UserEntity data
+ */
+@Service
+@Transactional
+@AllArgsConstructor
+public class UserService implements CrudService&lt;UserDto&gt; {
+
+<span class="fc" id="L26">    private static final Logger logger = LogManager.getLogger(UserService.class);</span>
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
+    /**
+     * Gets all UserEntities in database
+     *
+     * @return A list of corresponding UserDto
+     */
+    @Override
+    public List&lt;UserDto&gt; getAll() {
+<span class="fc" id="L41">        List&lt;UserEntity&gt; userEntities = userRepository.findAll();</span>
+<span class="fc" id="L42">        List&lt;UserDto&gt; userDtos = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">        for (UserEntity userEntity : userEntities) {</span>
+<span class="fc" id="L44">            userDtos.add(new UserDto(userEntity));</span>
+<span class="fc" id="L45">        }</span>
+<span class="fc" id="L46">        return userDtos;</span>
+    }
+
+    /**
+     * Gets a specific UserEntity in database
+     *
+     * @param id : The id to be found
+     * @return The corresponding UserDto
+     */
+    @Override
+    public UserDto getById(Integer id) {
+<span class="fc" id="L57">        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user Id:&quot; + id));</span>
+<span class="fc" id="L58">        return new UserDto(userEntity);</span>
+    }
+
+    /**
+     * Saves a UserEntity in database
+     *
+     * @param userDto : The UserDto with values to be saved
+     */
+    @Override
+    public void save(UserDto userDto) {
+<span class="fc" id="L68">        Optional&lt;UserEntity&gt; userEntityOptional = userRepository.findByUsername(userDto.getUsername());</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (userEntityOptional.isPresent()) {</span>
+<span class="fc" id="L70">            logger.error(&quot;Invalid user with username :&quot; + userDto.getUsername());</span>
+<span class="fc" id="L71">            throw new IllegalArgumentException(&quot;Invalid user with username :&quot; + userDto.getUsername());</span>
+        } else {
+<span class="fc" id="L73">            UserEntity userEntity = new UserEntity(userDto);</span>
+<span class="fc" id="L74">            userEntity.setPassword(userDetailsService.encode(userDto.getPassword()));</span>
+<span class="fc" id="L75">            userRepository.saveAndFlush(userEntity);</span>
+        }
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Updates a UserEntity in database
+     *
+     * @param userDto : The UserDto with new values
+     */
+    @Override
+    public void update(UserDto userDto) {
+<span class="fc" id="L86">        UserEntity userEntity = userRepository.findById(userDto.getId()).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user with id :&quot; + userDto.getId()));</span>
+<span class="fc" id="L87">        userEntity.updateFromDto(userDto);</span>
+<span class="fc" id="L88">        userEntity.setPassword(userDetailsService.encode(userDto.getPassword()));</span>
+<span class="fc" id="L89">        userRepository.saveAndFlush(userEntity);</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Deletes a UserEntity in database
+     *
+     * @param id : The id of the UserEntity to be deleted
+     */
+    @Override
+    public void delete(Integer id) {
+<span class="fc" id="L99">        userRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid user with id :&quot; + id));</span>
+<span class="fc" id="L100">        userRepository.deleteById(id);</span>
+<span class="fc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

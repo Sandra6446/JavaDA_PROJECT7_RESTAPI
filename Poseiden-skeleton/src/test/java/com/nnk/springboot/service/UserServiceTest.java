@@ -3,7 +3,7 @@ package com.nnk.springboot.service;
 import com.nnk.springboot.domain.dto.UserDto;
 import com.nnk.springboot.domain.entity.UserEntity;
 import com.nnk.springboot.repositories.UserRepository;
-import com.nnk.springboot.security.UserDetailsServiceImpl;
+import com.nnk.springboot.config.security.UserDetailsServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,6 +87,12 @@ public class UserServiceTest {
         userDto.setPassword("password");
         userService.save(userDto);
         verify(userRepository, times(1)).saveAndFlush(userEntityToSave);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void whenExceptionThrown_save() {
+        Mockito.when(userRepository.findByUsername(ArgumentMatchers.anyString())).thenReturn(Optional.of(userEntity));
+        userService.save(userDto);
     }
 
     @Test

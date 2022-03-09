@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rating.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.domain.entity</a> &gt; <span class="el_source">Rating.java</span></div><h1>Rating.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.domain.entity;
+
+import com.nnk.springboot.domain.dto.RatingDto;
+import lombok.*;
+
+import javax.persistence.*;
+import java.util.Objects;
+
+/**
+ * Represents a rating (mapping class)
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = &quot;rating&quot;)
+public class Rating {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String moodysRating;
+    private String sandPRating;
+    private String fitchRating;
+    private Integer orderNumber;
+
+<span class="fc" id="L27">    public Rating(String moodysRating, String sandPRating, String fitchRating, Integer orderNumber) {</span>
+<span class="fc" id="L28">        this.moodysRating = moodysRating;</span>
+<span class="fc" id="L29">        this.sandPRating = sandPRating;</span>
+<span class="fc" id="L30">        this.fitchRating = fitchRating;</span>
+<span class="fc" id="L31">        this.orderNumber = orderNumber;</span>
+<span class="fc" id="L32">    }</span>
+
+    /**
+     * Build a Rating with RatingDto values
+     *
+     * @param ratingDto : The RatingDto with values to be copied
+     */
+<span class="fc" id="L39">    public Rating(RatingDto ratingDto) {</span>
+<span class="fc" id="L40">        this.id = ratingDto.getId();</span>
+<span class="fc" id="L41">        this.moodysRating = ratingDto.getMoodysRating();</span>
+<span class="fc" id="L42">        this.sandPRating = ratingDto.getSandPRating();</span>
+<span class="fc" id="L43">        this.fitchRating = ratingDto.getFitchRating();</span>
+<span class="fc" id="L44">        this.orderNumber = ratingDto.getOrderNumber();</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Updates a Rating with RatingDto values
+     *
+     * @param ratingDto : The RatingDto with values to be updated
+     */
+    public void updateFromDto(RatingDto ratingDto) {
+<span class="fc bfc" id="L53" title="All 2 branches covered.">        if (Objects.equals(ratingDto.getId(), this.getId())) {</span>
+<span class="fc" id="L54">            this.moodysRating = ratingDto.getMoodysRating();</span>
+<span class="fc" id="L55">            this.sandPRating = ratingDto.getSandPRating();</span>
+<span class="fc" id="L56">            this.fitchRating = ratingDto.getFitchRating();</span>
+<span class="fc" id="L57">            this.orderNumber = ratingDto.getOrderNumber();</span>
+        }
+<span class="fc" id="L59">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

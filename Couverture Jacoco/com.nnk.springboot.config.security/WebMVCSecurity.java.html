@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebMVCSecurity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.config.security</a> &gt; <span class="el_source">WebMVCSecurity.java</span></div><h1>WebMVCSecurity.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.config.security;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+/**
+ * Security configuration
+ */
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+<span class="fc" id="L22">public class WebMVCSecurity extends WebSecurityConfigurerAdapter {</span>
+
+    @Autowired
+    UserDetailsServiceImpl userDetailsService;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+<span class="fc" id="L29">        return new BCryptPasswordEncoder();</span>
+    }
+
+    @Override
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+<span class="fc" id="L34">        PasswordEncoder passwordEncoder = passwordEncoder();</span>
+<span class="fc" id="L35">        auth.userDetailsService(userDetailsService)</span>
+<span class="fc" id="L36">                .passwordEncoder(passwordEncoder)</span>
+<span class="fc" id="L37">                .and()</span>
+                // Default User and Admin
+<span class="fc" id="L39">                .inMemoryAuthentication()</span>
+<span class="fc" id="L40">                .withUser(&quot;springuser&quot;).password(passwordEncoder.encode(&quot;spring123&quot;)).roles(&quot;USER&quot;)</span>
+<span class="fc" id="L41">                .and()</span>
+<span class="fc" id="L42">                .withUser(&quot;springadmin&quot;).password(passwordEncoder.encode(&quot;admin123&quot;)).roles(&quot;ADMIN&quot;);</span>
+        ;
+<span class="fc" id="L44">    }</span>
+
+    @Override
+    public void configure(WebSecurity webSecurity) {
+<span class="fc" id="L48">        webSecurity.ignoring()</span>
+<span class="fc" id="L49">                .antMatchers(&quot;/css/**&quot;);</span>
+<span class="fc" id="L50">    }</span>
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+<span class="fc" id="L54">        http</span>
+<span class="fc" id="L55">                .authorizeRequests()</span>
+<span class="fc" id="L56">                .antMatchers(&quot;/&quot;).permitAll()</span>
+<span class="fc" id="L57">                .anyRequest()</span>
+<span class="fc" id="L58">                .authenticated()</span>
+<span class="fc" id="L59">                .and()</span>
+<span class="fc" id="L60">                .formLogin()</span>
+                //In case of success the authenticationSuccessHandler redirects to a specific view
+<span class="fc" id="L62">                .successHandler(authenticationSuccessHandler()).permitAll().</span>
+<span class="fc" id="L63">                and()</span>
+                //Configuration of the logout
+<span class="fc" id="L65">                .logout()</span>
+<span class="fc" id="L66">                .logoutUrl(&quot;/app-logout&quot;)</span>
+                //Definition of the default logout success URL (redirecting to HomeController)
+<span class="fc" id="L68">                .logoutSuccessUrl(&quot;/&quot;)</span>
+                //Invalidate the current HTTP session and its cookies
+<span class="fc" id="L70">                .invalidateHttpSession(true)</span>
+<span class="fc" id="L71">                .deleteCookies(&quot;JSESSIONID&quot;)</span>
+<span class="fc" id="L72">                .permitAll()</span>
+<span class="fc" id="L73">                .and()</span>
+                //Definition of the default URL in case of a denied access
+<span class="fc" id="L75">                .exceptionHandling()</span>
+<span class="fc" id="L76">                .accessDeniedPage(&quot;/app/error&quot;);</span>
+<span class="fc" id="L77">    }</span>
+
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+<span class="fc" id="L81">        return new CustomAuthenticationSuccessHandler();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

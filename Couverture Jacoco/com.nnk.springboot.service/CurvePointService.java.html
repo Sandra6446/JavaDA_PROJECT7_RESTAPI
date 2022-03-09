@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CurvePointService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.service</a> &gt; <span class="el_source">CurvePointService.java</span></div><h1>CurvePointService.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.service;
+
+import com.nnk.springboot.domain.dto.CurvePointDto;
+import com.nnk.springboot.domain.entity.CurvePoint;
+import com.nnk.springboot.repositories.CurvePointRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Manages the CurvePoint data
+ */
+@Service
+@Transactional
+@AllArgsConstructor
+public class CurvePointService implements CrudService&lt;CurvePointDto&gt; {
+
+    @Autowired
+    CurvePointRepository curvePointRepository;
+
+    /**
+     * Gets all CurvePoints in database
+     *
+     * @return A list of corresponding CurvePointDto
+     */
+    @Override
+    public List&lt;CurvePointDto&gt; getAll() {
+<span class="fc" id="L32">        List&lt;CurvePoint&gt; curvePoints = curvePointRepository.findAll();</span>
+<span class="fc" id="L33">        List&lt;CurvePointDto&gt; curvePointDtos = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        for (CurvePoint curvePoint : curvePoints) {</span>
+<span class="fc" id="L35">            curvePointDtos.add(new CurvePointDto(curvePoint));</span>
+<span class="fc" id="L36">        }</span>
+<span class="fc" id="L37">        return curvePointDtos;</span>
+    }
+
+    /**
+     * Gets a specific CurvePoint in database
+     *
+     * @param id : The id to be found
+     * @return The corresponding CurvePointDto
+     */
+    @Override
+    public CurvePointDto getById(Integer id) {
+<span class="fc" id="L48">        CurvePoint curvePoint = curvePointRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid curve Id:&quot; + id));</span>
+<span class="fc" id="L49">        return new CurvePointDto(curvePoint);</span>
+    }
+
+    /**
+     * Saves a CurvePoint in database
+     *
+     * @param curvePointDto : The CurvePointDto with values to be saved
+     */
+    @Override
+    public void save(CurvePointDto curvePointDto) {
+<span class="fc" id="L59">        curvePointRepository.saveAndFlush(new CurvePoint(curvePointDto));</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Updates a CurvePoint in database
+     *
+     * @param curvePointDto : The CurvePointDto with new values
+     */
+    @Override
+    public void update(CurvePointDto curvePointDto) {
+<span class="fc" id="L69">        CurvePoint curvePoint = curvePointRepository.findById(curvePointDto.getId()).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid curve with id :&quot; + curvePointDto.getId()));</span>
+<span class="fc" id="L70">        curvePoint.updateFromDto(curvePointDto);</span>
+<span class="fc" id="L71">        curvePointRepository.saveAndFlush(curvePoint);</span>
+<span class="fc" id="L72">    }</span>
+
+    /**
+     * Deletes a CurvePoint in database
+     *
+     * @param id : The id of the CurvePoint to be deleted
+     */
+    @Override
+    public void delete(Integer id) {
+<span class="fc" id="L81">        curvePointRepository.findById(id).orElseThrow(() -&gt; new IllegalArgumentException(&quot;Invalid Curve with id :&quot; + id));</span>
+<span class="fc" id="L82">        curvePointRepository.deleteById(id);</span>
+<span class="fc" id="L83">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

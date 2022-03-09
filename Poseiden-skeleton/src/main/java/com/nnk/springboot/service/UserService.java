@@ -3,7 +3,7 @@ package com.nnk.springboot.service;
 import com.nnk.springboot.domain.dto.UserDto;
 import com.nnk.springboot.domain.entity.UserEntity;
 import com.nnk.springboot.repositories.UserRepository;
-import com.nnk.springboot.security.UserDetailsServiceImpl;
+import com.nnk.springboot.config.security.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

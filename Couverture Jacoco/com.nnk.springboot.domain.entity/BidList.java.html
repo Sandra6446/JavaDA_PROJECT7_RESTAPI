@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BidList.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.domain.entity</a> &gt; <span class="el_source">BidList.java</span></div><h1>BidList.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.domain.entity;
+
+import com.nnk.springboot.domain.dto.BidListDto;
+import lombok.*;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Objects;
+
+/**
+ * Represents a bidList (mapping class)
+ */
+@Data
+@NoArgsConstructor
+@Entity
+@Table(name = &quot;bidlist&quot;)
+public class BidList {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer BidListId;
+    private String account;
+    private String type;
+    private Double bidQuantity;
+    private Double askQuantity;
+    private Double bid;
+    private Double ask;
+    private String benchmark;
+    private Timestamp bidListDate;
+    private String commentary;
+    private String security;
+    private String status;
+    private String trader;
+    private String book;
+    private String creationName;
+    private Timestamp creationDate;
+    private String revisionName;
+    private Timestamp revisionDate;
+    private String dealName;
+    private String dealType;
+    private String sourceListId;
+    private String side;
+
+<span class="fc" id="L44">    public BidList(String account, String type, Double bidQuantity) {</span>
+<span class="fc" id="L45">        this.account = account;</span>
+<span class="fc" id="L46">        this.type = type;</span>
+<span class="fc" id="L47">        this.bidQuantity = bidQuantity;</span>
+<span class="fc" id="L48">    }</span>
+
+<span class="fc" id="L50">    public BidList(Integer bidListId, String account, String type, Double bidQuantity) {</span>
+<span class="fc" id="L51">        this.BidListId = bidListId;</span>
+<span class="fc" id="L52">        this.account = account;</span>
+<span class="fc" id="L53">        this.type = type;</span>
+<span class="fc" id="L54">        this.bidQuantity = bidQuantity;</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Build a BidList with BidListDto values
+     *
+     * @param bidListDto : The BidListDto with values to be copied
+     */
+<span class="fc" id="L62">    public BidList(BidListDto bidListDto) {</span>
+<span class="fc" id="L63">        this.BidListId = bidListDto.getBidListId();</span>
+<span class="fc" id="L64">        this.account = bidListDto.getAccount();</span>
+<span class="fc" id="L65">        this.type = bidListDto.getType();</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (bidListDto.getBidQuantity() == null) {</span>
+<span class="fc" id="L67">            this.setBidQuantity(0d);</span>
+        } else {
+<span class="fc" id="L69">            this.setBidQuantity(bidListDto.getBidQuantity());</span>
+        }
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Updates a BidList with BidListDto values
+     *
+     * @param bidListDto : The BidListDto with values to be updated
+     */
+    public void updateFromDto(BidListDto bidListDto) {
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (Objects.equals(bidListDto.getBidListId(), this.getBidListId())) {</span>
+<span class="fc" id="L80">            this.setAccount(bidListDto.getAccount());</span>
+<span class="fc" id="L81">            this.setType(bidListDto.getType());</span>
+<span class="fc bfc" id="L82" title="All 2 branches covered.">            if (bidListDto.getBidQuantity() == null) {</span>
+<span class="fc" id="L83">                this.setBidQuantity(0d);</span>
+            } else {
+<span class="fc" id="L85">                this.setBidQuantity(bidListDto.getBidQuantity());</span>
+            }
+        }
+<span class="fc" id="L88">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

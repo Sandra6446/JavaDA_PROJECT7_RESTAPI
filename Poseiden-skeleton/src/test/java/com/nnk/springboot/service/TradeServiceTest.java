@@ -84,12 +84,29 @@ public class TradeServiceTest {
     }
 
     @Test
+    public void withNullValue_save() {
+        Trade tradeToSave = new Trade(1, "First trade", "Type 1", 0d);
+        TradeDto tradeDtoWithNullValues = new TradeDto(1, "First trade", "Type 1", null);
+        tradeService.save(tradeDtoWithNullValues);
+        verify(tradeRepository, times(1)).saveAndFlush(tradeToSave);
+    }
+
+    @Test
     public void update() {
         Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trade));
         TradeDto tradeDtoWithNewValues = new TradeDto(1, "New trade", "Type 1", 20.0);
         tradeService.update(tradeDtoWithNewValues);
-        Trade tradeToUpdate = new Trade(1, "New trade", "Type 1", 20.0);
-        verify(tradeRepository, times(1)).saveAndFlush(tradeToUpdate);
+        Trade tradeUpdated = new Trade(1, "New trade", "Type 1", 20.0);
+        verify(tradeRepository, times(1)).saveAndFlush(tradeUpdated);
+    }
+
+    @Test
+    public void withNullValues_update() {
+        Mockito.when(tradeRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(trade));
+        TradeDto tradeDtoWithNullValues = new TradeDto(1, "New trade", "Type 1", null);
+        tradeService.update(tradeDtoWithNullValues);
+        Trade tradeUpdated = new Trade(1, "New trade", "Type 1", 0d);
+        verify(tradeRepository, times(1)).saveAndFlush(tradeUpdated);
     }
 
     @Test(expected = IllegalArgumentException.class)

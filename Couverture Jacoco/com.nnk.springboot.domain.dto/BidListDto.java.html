@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BidListDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.domain.dto</a> &gt; <span class="el_source">BidListDto.java</span></div><h1>BidListDto.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.domain.dto;
+
+import com.nnk.springboot.domain.entity.BidList;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
+
+/**
+ * Represents a bid
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class BidListDto {
+
+    private Integer BidListId;
+
+    @NotBlank(message = &quot;Account is mandatory&quot;)
+    private String account;
+
+    @NotBlank(message = &quot;Type is mandatory&quot;)
+    private String type;
+
+    @PositiveOrZero(message = &quot;Value must be greater than or equal to zero&quot;)
+    private Double bidQuantity;
+
+    /**
+     * Build a BidListDto with BidList values
+     *
+     * @param bidList : The BidList with values to be copied
+     */
+<span class="fc" id="L35">    public BidListDto(BidList bidList) {</span>
+<span class="fc" id="L36">        this.BidListId = bidList.getBidListId();</span>
+<span class="fc" id="L37">        this.account = bidList.getAccount();</span>
+<span class="fc" id="L38">        this.type = bidList.getType();</span>
+<span class="fc" id="L39">        this.bidQuantity = bidList.getBidQuantity();</span>
+<span class="fc" id="L40">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

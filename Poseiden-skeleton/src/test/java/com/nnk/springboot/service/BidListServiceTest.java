@@ -1,7 +1,9 @@
 package com.nnk.springboot.service;
 
 import com.nnk.springboot.domain.dto.BidListDto;
+import com.nnk.springboot.domain.dto.TradeDto;
 import com.nnk.springboot.domain.entity.BidList;
+import com.nnk.springboot.domain.entity.Trade;
 import com.nnk.springboot.repositories.BidListRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -84,12 +86,29 @@ public class BidListServiceTest {
     }
 
     @Test
+    public void withNullValue_save() {
+        BidList bidListToSave = new BidList(1, "First bidList", "Type 1", 0d);
+        BidListDto bidListDtoWithNullValues = new BidListDto(1, "First bidList", "Type 1", null);
+        bidListService.save(bidListDtoWithNullValues);
+        verify(bidListRepository, times(1)).saveAndFlush(bidListToSave);
+    }
+
+    @Test
     public void update() {
         Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidList));
         BidListDto bidListDtoWithNewValues = new BidListDto(1, "New bidList", "Type 1", 20d);
         bidListService.update(bidListDtoWithNewValues);
-        BidList bidListToUpdate = new BidList(1, "New bidList", "Type 1", 20d);
-        verify(bidListRepository, times(1)).saveAndFlush(bidListToUpdate);
+        BidList bidListUpdated = new BidList(1, "New bidList", "Type 1", 20d);
+        verify(bidListRepository, times(1)).saveAndFlush(bidListUpdated);
+    }
+
+    @Test
+    public void withNullValues_update() {
+        Mockito.when(bidListRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(bidList));
+        BidListDto bidListDtoWithNullValues = new BidListDto(1, "New bidList", "Type 1", null);
+        bidListService.update(bidListDtoWithNullValues);
+        BidList bidListUpdated = new BidList(1, "New bidList", "Type 1", 0d);
+        verify(bidListRepository, times(1)).saveAndFlush(bidListUpdated);
     }
 
     @Test(expected = IllegalArgumentException.class)

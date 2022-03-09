@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RatingController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">spring-boot-skeleton</a> &gt; <a href="index.source.html" class="el_package">com.nnk.springboot.controllers</a> &gt; <span class="el_source">RatingController.java</span></div><h1>RatingController.java</h1><pre class="source lang-java linenums">package com.nnk.springboot.controllers;
+
+import com.nnk.springboot.domain.dto.RatingDto;
+import com.nnk.springboot.service.RatingService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.validation.Valid;
+
+@Controller
+<span class="fc" id="L19">public class RatingController {</span>
+
+<span class="fc" id="L21">    private static final Logger logger = LogManager.getLogger(RatingController.class);</span>
+
+    @Autowired
+    RatingService ratingService;
+
+    /**
+     * Renders the view &quot;rating/list&quot; with the list of all ratings
+     *
+     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @return The string &quot;rating/list&quot; to render the associated view
+     */
+    @RequestMapping(&quot;/rating/list&quot;)
+    public String home(Model model) {
+<span class="fc" id="L34">        model.addAttribute(&quot;ratingDto&quot;, ratingService.getAll());</span>
+<span class="fc" id="L35">        return &quot;rating/list&quot;;</span>
+    }
+
+    /**
+     * Renders the view &quot;rating/add&quot; with a form to add a rating
+     *
+     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @return The string &quot;rating/add&quot; to render the associated view
+     */
+    @GetMapping(&quot;/rating/add&quot;)
+    public String addRatingForm(Model model) {
+<span class="fc" id="L46">        model.addAttribute(new RatingDto());</span>
+<span class="fc" id="L47">        return &quot;rating/add&quot;;</span>
+    }
+
+    /**
+     * Redirects to the view &quot;rating/list&quot; with the list of all ratings if the rating saving succeed
+     *
+     * @param ratingDto : The ratingDto to create
+     * @param result    : The binding results
+     * @param model     : The model map with data (attributes) to be transmitted to the view
+     * @return The string &quot;redirect:/rating/list&quot; to redirect to the associated view if the operation succeeds, otherwise the string &quot;rating/add&quot; to display the reason of the failure on the associated view
+     */
+    @PostMapping(&quot;/rating/validate&quot;)
+    public String validate(@Valid RatingDto ratingDto, BindingResult result, Model model) {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L61">            logger.error(result.getAllErrors());</span>
+<span class="fc" id="L62">            return &quot;rating/add&quot;;</span>
+        }
+<span class="fc" id="L64">        ratingService.save(ratingDto);</span>
+<span class="fc" id="L65">        model.addAttribute(&quot;ratingDto&quot;, ratingService.getAll());</span>
+<span class="fc" id="L66">        logger.info(&quot;Rating saved in database&quot;);</span>
+<span class="fc" id="L67">        return &quot;redirect:/rating/list&quot;;</span>
+    }
+
+    /**
+     * Renders the view &quot;rating/update&quot; with a prefilled form to update a rating
+     *
+     * @param id    : The id of the rating to be updated
+     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @return The string &quot;rating/update&quot; to render the associated view
+     */
+    @GetMapping(&quot;/rating/update/{id}&quot;)
+    public String showUpdateForm(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+<span class="fc" id="L79">        model.addAttribute(&quot;ratingDto&quot;, ratingService.getById(id));</span>
+<span class="fc" id="L80">        return &quot;rating/update&quot;;</span>
+    }
+
+    /**
+     * Redirects to the view &quot;rating/list&quot; with the list of all ratings if the rating updating succeed
+     *
+     * @param id        : The id of the rating to be updated
+     * @param ratingDto : The ratingDto with new values
+     * @param result    : The binding results
+     * @param model     : The model map with data (attributes) to be transmitted to the view
+     * @return The string &quot;redirect:/rating/list&quot; to redirect to the associated view if the operation succeeds, otherwise the string &quot;rating/update&quot; to display the reason of the failure on the associated view
+     */
+    @PostMapping(&quot;/rating/update/{id}&quot;)
+    public String updateRating(@PathVariable(&quot;id&quot;) Integer id, @Valid RatingDto ratingDto,
+                               BindingResult result, Model model) {
+<span class="fc" id="L95">        ratingDto.setId(id);</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (result.hasErrors()) {</span>
+<span class="fc" id="L97">            logger.error(result.getAllErrors());</span>
+<span class="fc" id="L98">            return &quot;rating/update&quot;;</span>
+        }
+<span class="fc" id="L100">        ratingService.update(ratingDto);</span>
+<span class="fc" id="L101">        model.addAttribute(&quot;ratingDto&quot;, ratingService.getAll());</span>
+<span class="fc" id="L102">        logger.info(String.format(&quot;Rating %s updated&quot;, id));</span>
+<span class="fc" id="L103">        return &quot;redirect:/rating/list&quot;;</span>
+    }
+
+    /**
+     * Redirects to the view &quot;rating/list&quot; with the list of all ratings if the rating updating succeed
+     *
+     * @param id    : The id of the rating to be deleted
+     * @param model : The model map with data (attributes) to be transmitted to the view
+     * @return The string &quot;redirect:/rating/list&quot; to redirect to the associated view if the operation succeeds, otherwise the reason of the failure
+     */
+    @GetMapping(&quot;/rating/delete/{id}&quot;)
+    public String deleteRating(@PathVariable(&quot;id&quot;) Integer id, Model model) {
+<span class="fc" id="L115">        ratingService.delete(id);</span>
+<span class="fc" id="L116">        model.addAttribute(&quot;ratingDto&quot;, ratingService.getAll());</span>
+<span class="fc" id="L117">        logger.info(String.format(&quot;Rating %s deleted&quot;, id));</span>
+<span class="fc" id="L118">        return &quot;redirect:/rating/list&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

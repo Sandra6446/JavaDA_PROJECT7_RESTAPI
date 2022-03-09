@@ -84,12 +84,29 @@ public class CurvePointServiceTest {
     }
 
     @Test
+    public void withNullValue_save() {
+        CurvePoint curvePointToSave = new CurvePoint(1, 5,0d,0d);
+        CurvePointDto curvePointDtoWithNullValues = new CurvePointDto(1, 5,null,null);
+        curvePointService.save(curvePointDtoWithNullValues);
+        verify(curvePointRepository, times(1)).saveAndFlush(curvePointToSave);
+    }
+
+    @Test
     public void update() {
         Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoint));
         CurvePointDto curvePointDtoWithNewValues = new CurvePointDto(1, 5, 10d, 100d);
         curvePointService.update(curvePointDtoWithNewValues);
-        CurvePoint curvePointToUpdate = new CurvePoint(1, 5, 10d, 100d);
-        verify(curvePointRepository, times(1)).saveAndFlush(curvePointToUpdate);
+        CurvePoint curvePointUpdated = new CurvePoint(1, 5, 10d, 100d);
+        verify(curvePointRepository, times(1)).saveAndFlush(curvePointUpdated);
+    }
+
+    @Test
+    public void withNullValues_update() {
+        Mockito.when(curvePointRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(curvePoint));
+        CurvePointDto curvePointDtoWithNullValues = new CurvePointDto(1, 5,null,null);
+        curvePointService.update(curvePointDtoWithNullValues);
+        CurvePoint curvePointUpdated = new CurvePoint(1, 5, 0d, 0d);
+        verify(curvePointRepository, times(1)).saveAndFlush(curvePointUpdated);
     }
 
     @Test(expected = IllegalArgumentException.class)
