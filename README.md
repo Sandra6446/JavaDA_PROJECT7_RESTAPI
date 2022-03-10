@@ -4,7 +4,7 @@ Présentation du repository
 -----------------------------------
 
 ```diff
-- La branche master contient le code avant réorganisation et optimisation. 
+- La branche master contient le code initial. 
 - La branche develop contient le travail final. 
 ```
 -----------------------
