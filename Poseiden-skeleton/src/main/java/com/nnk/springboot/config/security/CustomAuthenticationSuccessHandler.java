@@ -23,9 +23,9 @@ import java.util.Map;
  */
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private Logger logger = LogManager.getLogger(CustomAuthenticationSuccessHandler.class);
+    private final Logger logger = LogManager.getLogger(CustomAuthenticationSuccessHandler.class);
 
-    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,

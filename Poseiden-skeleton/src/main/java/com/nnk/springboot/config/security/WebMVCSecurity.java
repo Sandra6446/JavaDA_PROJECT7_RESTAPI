@@ -40,7 +40,6 @@ public class WebMVCSecurity extends WebSecurityConfigurerAdapter {
                 .withUser("springuser").password(passwordEncoder.encode("spring123")).roles("USER")
                 .and()
                 .withUser("springadmin").password(passwordEncoder.encode("admin123")).roles("ADMIN");
-        ;
     }
 
     @Override
